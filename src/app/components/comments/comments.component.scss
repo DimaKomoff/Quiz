@@ -1,0 +1,18 @@
+:host {
+  .mat-mdc-card {
+    margin: 16px 0;
+
+    .mat-mdc-card-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .mat-mdc-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+}

@@ -6,7 +6,6 @@ import { IGlobalState, ITeam } from '../../interfaces/global-store.interface';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { GlobalActions } from './global.actions';
 
-
 const GLOBAL_STATE_TOKEN = new StateToken<IGlobalState>('GLOBAL_STATE_TOKEN');
 
 @State<IGlobalState>({
@@ -110,6 +109,11 @@ export class GlobalState {
   @Selector()
   static getTeamInAction(state: IGlobalState): ITeam {
     return state.teams[state.teamInAction as Team];
+  }
+
+  @Selector()
+  static getIndexTeamInAction(state: IGlobalState): Team {
+    return state.teamInAction as Team;
   }
 
   @Action(GlobalActions.SetStateToLocalStorage)

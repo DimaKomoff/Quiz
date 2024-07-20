@@ -1,4 +1,3 @@
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,12 +15,15 @@ import { quizInitializer } from './initializers/quiz.initializer';
 import { GlobalState } from './store/global/global.state';
 import { EnterTeamNamesComponent } from './components/enter-team-names/enter-team-names.component';
 import { TrickComponent } from './components/trick/trick.component';
+import { CommentsComponent } from './components/comments/comments.component';
+import { CommentsState } from './store/comments/comments.state';
 
 @NgModule({
   declarations: [
     AppComponent,
     EnterTeamNamesComponent,
-    TrickComponent
+    TrickComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +33,8 @@ import { TrickComponent } from './components/trick/trick.component';
     MatButtonModule,
     MatListModule,
     NgxsModule.forRoot([
-      GlobalState
+      GlobalState,
+      CommentsState
     ], {developmentMode: true}),
     FormsModule,
     MatInputModule,

@@ -1,6 +1,14 @@
 <h1 class="mat-display-1">Вікторина</h1>
 <div *ngIf="teamInAction() as team">
-  <p>Грає команда - <b>{{team.name}}</b></p>
+  <p>Грає команда - <b>{{ team.name }}</b></p>
 </div>
 <app-enter-team-names *ngIf="round() === null"></app-enter-team-names>
 <app-trick *ngIf="round() === roundName.Trick"></app-trick>
+<app-comments *ngIf="round() === roundName.Comments"></app-comments>
+
+<footer *ngIf="round() !== null" class="footer">
+  <div class="footer-actions-wrapper">
+    <button mat-raised-button color="primary" (click)="changeTeam()">Змінити команду</button>
+    <button mat-raised-button color="primary" (click)="nextRound()">Наступний раунд</button>
+  </div>
+</footer>
