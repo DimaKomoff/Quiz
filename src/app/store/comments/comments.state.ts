@@ -34,7 +34,25 @@ export class CommentsState {
   @Action(CommentsRoundActions.SetInitialState)
   setInitialState(ctx: StateContext<ICommentsRoundState>, action: CommentsRoundActions.SetInitialState) {
     ctx.setState(action.state);
-    console.log(action);
+
+    ctx.dispatch(new CommentsRoundActions.SetStateToLocalStorage());
+  }
+
+  @Action(CommentsRoundActions.RemoveCommentOptionAndDecreaseScore)
+  removeOption(ctx: StateContext<ICommentsRoundState>, action: CommentsRoundActions.RemoveCommentOptionAndDecreaseScore) {
+    const state = ctx.getState();
+
+    ctx.setState({
+      ...state,
+      [action.team]: {
+        ...state[action.team],
+        [action.question]: {
+          comment: 'new Comment',
+          score: state[action.team].question1.score - 1,
+          options: state[action.team].question1.options.filter(item => item.videoName !== action.videoName)
+        }
+      }
+    });
 
     ctx.dispatch(new CommentsRoundActions.SetStateToLocalStorage());
   }

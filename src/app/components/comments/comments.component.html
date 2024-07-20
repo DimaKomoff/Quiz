@@ -4,7 +4,7 @@
   </mat-card-content>
   <mat-card-footer>
     <ng-container *ngFor="let option of teamsQuestions[indexTeamInAction()]().options">
-      <button mat-raised-button color="warn">{{ option.videoName }}</button>
+      <button mat-raised-button color="warn" (click)="checkAnswer(indexTeamInAction(), option)">{{ option.videoName }}</button>
     </ng-container>
   </mat-card-footer>
 </mat-card>

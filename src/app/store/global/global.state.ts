@@ -56,18 +56,17 @@ export class GlobalState {
   @Action(GlobalActions.SetTeamScore)
   setTeamScore(ctx: StateContext<IGlobalState>, action: GlobalActions.SetTeamScore) {
     const state = ctx.getState();
+    const { team } = action;
 
-    const {team} = action
     ctx.setState({
       ...state,
       teams: {
         ...state.teams,
         [team]: {
           ...state.teams[team],
-          score: action.score
+          score: state.teams[team].score + action.score
         }
       }
-
     });
 
     ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
@@ -77,7 +76,7 @@ export class GlobalState {
   changeTeamInAction(ctx: StateContext<IGlobalState>) {
     const state = ctx.getState();
 
-    const teams = Object.values(Team).filter(t => typeof t === 'number')
+    const teams = Object.values(Team).filter(t => typeof t === 'number');
 
     const currentIndex = teams.findIndex(t => t === state.teamInAction);
 
@@ -118,6 +117,6 @@ export class GlobalState {
 
   @Action(GlobalActions.SetStateToLocalStorage)
   private setGlobalStateToLocalStorage(ctx: StateContext<IGlobalState>) {
-    this.localStorage.setItem(GLOBAL_STORE_CONSTANT.localStorageKey, JSON.stringify(ctx.getState()))
+    this.localStorage.setItem(GLOBAL_STORE_CONSTANT.localStorageKey, JSON.stringify(ctx.getState()));
   }
 }
