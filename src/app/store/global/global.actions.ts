@@ -1,19 +1,25 @@
 import { RoundName, Team } from '../../enums/global-state.enum';
-import { ITeam } from '../../interfaces/global-store.interface';
+import { IGlobalState } from '../../interfaces/global-store.interface';
 
 const ACTION_SCOPE = '[Global]';
 
 export namespace GlobalActions {
+  export class SetInitialState {
+    static readonly type = `${ACTION_SCOPE} Set Initial State`;
+
+    constructor(public state: IGlobalState) {}
+  }
+
   export class SetRound {
     static readonly type = `${ACTION_SCOPE} Set Round`;
 
     constructor(public round: RoundName) {}
   }
 
-  export class SetTeamName {
+  export class StartGame {
     static readonly type = `${ACTION_SCOPE} Set Team Name`;
 
-    constructor(public team: Team, public name: string) {}
+    constructor(public team1Name: string, public team2Name: string) {}
   }
 
   export class SetTeamScore {

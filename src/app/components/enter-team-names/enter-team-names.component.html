@@ -1,0 +1,28 @@
+<form [formGroup]="form" (submit)="enterTeamNames()">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Введіть назви команд</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="team-inputs-wrapper">
+        <mat-form-field>
+          <mat-label>Команда 1</mat-label>
+          <input type="email" matInput [formControl]="team1NameFC" placeholder="Команда 1">
+
+          <mat-error *ngIf="false">Please enter a valid email address</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Команда 2</mat-label>
+          <input type="email" matInput [formControl]="team2NameFC" placeholder="Команда 2">
+
+          <mat-error *ngIf="false">Please enter a valid email address</mat-error>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button [disabled]="form.invalid" mat-raised-button color="primary">Готово</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

@@ -1,14 +1,3 @@
 <h1 class="mat-display-1">Вікторина</h1>
-<mat-card appearance="outlined">
-  <mat-card-header>
-    <mat-card-title>Раунд 1</mat-card-title>
-    <mat-card-subtitle>Підстава</mat-card-subtitle>
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <mat-card-content>
-    content
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button>Learn More</button>
-  </mat-card-actions>
-</mat-card>
+<app-enter-team-names *ngIf="round() === null"></app-enter-team-names>
+<app-trick *ngIf="round() === roundName.Trick"></app-trick>

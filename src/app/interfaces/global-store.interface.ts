@@ -8,5 +8,5 @@ export interface ITeam {
 export type IGlobalState = {
   [key in Team]: ITeam
 } & {
-  round: RoundName;
+  round: RoundName | null;
 };

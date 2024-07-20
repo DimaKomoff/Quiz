@@ -1,5 +1,5 @@
 export enum RoundName {
-  First,
+  Trick,
   Comments,
   FifthTenth,
   Alias
