@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatRadioModule } from '@angular/material/radio';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -35,6 +36,7 @@ import { TrickComponent } from './components/trick/trick.component';
     FormsModule,
     MatInputModule,
     ReactiveFormsModule,
+    MatRadioModule,
   ],
   providers: [
     {

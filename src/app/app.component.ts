@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   roundName = RoundName;
 
   round = this.store.selectSignal(GlobalState.getRound);
+  teamInAction = this.store.selectSignal(GlobalState.getTeamInAction);
 
   ngOnInit(): void {
   }

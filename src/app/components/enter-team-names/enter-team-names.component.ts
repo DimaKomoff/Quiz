@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
+import { Team } from '../../enums/global-state.enum';
 import { GlobalActions } from '../../store/global/global.actions';
 
 const isNamesUnique = (group: FormGroup): ValidationErrors | null => {
@@ -29,17 +30,31 @@ export class EnterTeamNamesComponent {
 
   team2NameFC = new FormControl('', Validators.required);
 
+  startingTeam = new FormControl(null, Validators.required);
+
+  team = Team;
+
   form: FormGroup = this.fb.group({
     team1: this.team1NameFC,
-    team2: this.team2NameFC
+    team2: this.team2NameFC,
+    startingTeam: this.startingTeam
   }, {
     validators: [isNamesUnique]
   });
 
   enterTeamNames(): void {
     this.store.dispatch(new GlobalActions.StartGame(
-      this.team1NameFC.value as string,
-      this.team2NameFC.value as string,
+      this.team1Name,
+      this.team2Name,
+      this.startingTeam.value as unknown as Team
     ))
+  }
+
+  get team1Name(): string {
+    return this.team1NameFC.value as string
+  }
+
+  get team2Name(): string {
+    return this.team2NameFC.value as string
   }
 }

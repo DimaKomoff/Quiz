@@ -33,19 +33,22 @@ export class GlobalState {
   }
 
   @Action(GlobalActions.StartGame)
-  setTeamNames(ctx: StateContext<IGlobalState>, action: GlobalActions.StartGame) {
+  startGame(ctx: StateContext<IGlobalState>, action: GlobalActions.StartGame) {
     const state = ctx.getState();
     ctx.setState({
       ...state,
       round: RoundName.Trick,
-      [Team.Team1]: {
-        ...state[Team.Team1],
-        name: action.team1Name
+      teams: {
+        [Team.Team1]: {
+          ...state.teams[Team.Team1],
+          name: action.team1Name
+        },
+        [Team.Team2]: {
+          ...state.teams[Team.Team2],
+          name: action.team2Name
+        },
       },
-      [Team.Team2]: {
-        ...state[Team.Team2],
-        name: action.team2Name
-      }
+      teamInAction: action.startingTeam
     });
 
     ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
@@ -58,10 +61,32 @@ export class GlobalState {
     const {team} = action
     ctx.setState({
       ...state,
-      [team]: {
-        ...state[team],
-        score: action.score
+      teams: {
+        ...state.teams,
+        [team]: {
+          ...state.teams[team],
+          score: action.score
+        }
       }
+
+    });
+
+    ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
+  }
+
+  @Action(GlobalActions.ChangeTeamInAction)
+  changeTeamInAction(ctx: StateContext<IGlobalState>) {
+    const state = ctx.getState();
+
+    const teams = Object.values(Team).filter(t => typeof t === 'number')
+
+    const currentIndex = teams.findIndex(t => t === state.teamInAction);
+
+    const nextIndex = (currentIndex + 1) % teams.length;
+
+    ctx.setState({
+      ...state,
+      teamInAction: teams[nextIndex] as Team
     });
 
     ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
@@ -74,12 +99,17 @@ export class GlobalState {
 
   @Selector()
   static getTeam1(state: IGlobalState): ITeam {
-    return state[Team.Team1];
+    return state.teams[Team.Team1];
   }
 
   @Selector()
   static getTeam2(state: IGlobalState): ITeam {
-    return state[Team.Team2];
+    return state.teams[Team.Team2];
+  }
+
+  @Selector()
+  static getTeamInAction(state: IGlobalState): ITeam {
+    return state.teams[state.teamInAction as Team];
   }
 
   @Action(GlobalActions.SetStateToLocalStorage)

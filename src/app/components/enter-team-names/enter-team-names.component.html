@@ -20,6 +20,15 @@
           <mat-error *ngIf="false">Please enter a valid email address</mat-error>
         </mat-form-field>
       </div>
+
+      <div class="radio-buttons-wrapper">
+        <label id="example-radio-group-label">Яка команда розпочинає гру?</label>
+
+        <mat-radio-group [formControl]="startingTeam" color="primary" aria-label="Select an option">
+          <mat-radio-button [value]="team.Team1">{{team1Name}}</mat-radio-button>
+          <mat-radio-button [value]="team.Team2">{{team2Name}}</mat-radio-button>
+        </mat-radio-group>
+      </div>
     </mat-card-content>
     <mat-card-actions>
       <button [disabled]="form.invalid" mat-raised-button color="primary">Готово</button>

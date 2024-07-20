@@ -19,7 +19,7 @@ export namespace GlobalActions {
   export class StartGame {
     static readonly type = `${ACTION_SCOPE} Set Team Name`;
 
-    constructor(public team1Name: string, public team2Name: string) {}
+    constructor(public team1Name: string, public team2Name: string, public startingTeam: Team) {}
   }
 
   export class SetTeamScore {
@@ -30,5 +30,9 @@ export namespace GlobalActions {
 
   export class SetStateToLocalStorage {
     static readonly type = `${ACTION_SCOPE} Set State To Local Storage`;
+  }
+
+  export class ChangeTeamInAction {
+    static readonly type = `${ACTION_SCOPE} Change team in action`;
   }
 }

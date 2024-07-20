@@ -1,3 +1,6 @@
 <h1 class="mat-display-1">Вікторина</h1>
+<div *ngIf="teamInAction() as team">
+  <p>Грає команда - <b>{{team.name}}</b></p>
+</div>
 <app-enter-team-names *ngIf="round() === null"></app-enter-team-names>
 <app-trick *ngIf="round() === roundName.Trick"></app-trick>
