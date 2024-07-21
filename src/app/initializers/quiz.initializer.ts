@@ -11,9 +11,9 @@ export const quizInitializer = () => {
 
   const globalState = localStorage.getItem(GLOBAL_STORE_CONSTANT.localStorageKey);
 
-  const initialState = globalState ? JSON.parse(globalState) : INITIAL_DEFAULT_GLOBAL_STATE;
+  if (globalState) {
+    store.dispatch(new GlobalActions.SetInitialState(JSON.parse(globalState)));
+  }
 
-  store.dispatch(new GlobalActions.SetInitialState(initialState));
-
-  return () => of(initialState);
+  return () => of(globalState);
 };

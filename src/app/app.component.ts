@@ -8,15 +8,12 @@ import { GlobalState } from './store/global/global.state';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   private readonly store = inject(Store);
-  title = 'quiz';
+  title = 'Вікторина';
 
   roundName = RoundName;
 
   round = this.store.selectSignal(GlobalState.getRound);
   teamInAction = this.store.selectSignal(GlobalState.getTeamInAction);
-
-  ngOnInit(): void {
-  }
 }

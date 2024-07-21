@@ -1,0 +1,11 @@
+<mat-card
+  *ngFor="let category of roundTask().categories"
+  class="category-card"
+  appearance="outlined"
+  (click)="chooseQuestionComplexity(category)">
+  <mat-card-header>
+    <mat-card-content>
+      <h3>{{ category.name }}</h3>
+    </mat-card-content>
+  </mat-card-header>
+</mat-card>

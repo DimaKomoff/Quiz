@@ -1,20 +1,22 @@
+import { state } from '@angular/animations';
 import { inject, Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
-import { GLOBAL_STORE_CONSTANT } from '../../constants/global-store.constant';
+import { GLOBAL_STORE_CONSTANT, INITIAL_DEFAULT_GLOBAL_STATE } from '../../constants/global-store.constant';
 import { RoundName, Team } from '../../enums/global-state.enum';
 import { IGlobalState, ITeam } from '../../interfaces/global-store.interface';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { StateBase } from '../state.base';
 import { GlobalActions } from './global.actions';
 
 
 const GLOBAL_STATE_TOKEN = new StateToken<IGlobalState>('GLOBAL_STATE_TOKEN');
 
 @State<IGlobalState>({
-  name: GLOBAL_STATE_TOKEN
+  name: GLOBAL_STATE_TOKEN,
+  defaults: INITIAL_DEFAULT_GLOBAL_STATE
 })
 @Injectable()
-export class GlobalState {
-  private readonly localStorage = inject(LocalStorageService);
+export class GlobalState extends StateBase {
+  readonly localStorageKey: string = GLOBAL_STORE_CONSTANT.localStorageKey;
 
   @Action(GlobalActions.SetInitialState)
   setInitialState(ctx: StateContext<IGlobalState>, action: GlobalActions.SetInitialState) {
@@ -29,7 +31,7 @@ export class GlobalState {
       round: action.round
     });
 
-    ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
+    this.setStateToLocalStorage(ctx);
   }
 
   @Action(GlobalActions.StartGame)
@@ -51,7 +53,7 @@ export class GlobalState {
       teamInAction: action.startingTeam
     });
 
-    ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
+    this.setStateToLocalStorage(ctx);
   }
 
   @Action(GlobalActions.SetTeamScore)
@@ -71,7 +73,7 @@ export class GlobalState {
 
     });
 
-    ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
+    this.setStateToLocalStorage(ctx);
   }
 
   @Action(GlobalActions.ChangeTeamInAction)
@@ -89,7 +91,7 @@ export class GlobalState {
       teamInAction: teams[nextIndex] as Team
     });
 
-    ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
+    this.setStateToLocalStorage(ctx);
   }
 
   @Selector()
@@ -110,10 +112,5 @@ export class GlobalState {
   @Selector()
   static getTeamInAction(state: IGlobalState): ITeam {
     return state.teams[state.teamInAction as Team];
-  }
-
-  @Action(GlobalActions.SetStateToLocalStorage)
-  private setGlobalStateToLocalStorage(ctx: StateContext<IGlobalState>) {
-    this.localStorage.setItem(GLOBAL_STORE_CONSTANT.localStorageKey, JSON.stringify(ctx.getState()))
   }
 }

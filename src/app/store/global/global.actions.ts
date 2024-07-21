@@ -28,10 +28,6 @@ export namespace GlobalActions {
     constructor(public team: Team, public score: number) {}
   }
 
-  export class SetStateToLocalStorage {
-    static readonly type = `${ACTION_SCOPE} Set State To Local Storage`;
-  }
-
   export class ChangeTeamInAction {
     static readonly type = `${ACTION_SCOPE} Change team in action`;
   }
