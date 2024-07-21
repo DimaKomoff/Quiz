@@ -53,8 +53,8 @@ export class GlobalState {
     ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
   }
 
-  @Action(GlobalActions.SetTeamScore)
-  setTeamScore(ctx: StateContext<IGlobalState>, action: GlobalActions.SetTeamScore) {
+  @Action(GlobalActions.UpdateTeamScore)
+  updateTeamScore(ctx: StateContext<IGlobalState>, action: GlobalActions.UpdateTeamScore) {
     const state = ctx.getState();
     const { team } = action;
 

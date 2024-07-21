@@ -1,14 +1,22 @@
 import { Team } from '../enums/global-state.enum';
+import { Question } from '../enums/comments.enum';
+
+type Questions = {
+  [key in Question]: ICommentQuestion
+};
+
+interface IQuestionsExtended extends Questions {
+  currentQuestion: Question;
+}
 
 export type ICommentsRoundState = {
-  [key in Team]: {
-    question1: ICommentQuestion
-  };
+  [key in Team]: IQuestionsExtended;
 };
 
 export interface ICommentQuestion {
-  comment: string;
+  comments: string[];
   score: number;
+  step: number;
   options: ICommentOption[];
 }
 

@@ -1,12 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
+
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
 import { CommentsRoundActions } from '../../store/comments/comments.actions';
-import { INITIAL_DEFAULT_COMMENTS_STATE } from '../../constants/comments-store.constant';
 import { GlobalState } from '../../store/global/global.state';
 import { CommentsState } from '../../store/comments/comments.state';
 import { Team } from '../../enums/global-state.enum';
 import { ICommentOption } from '../../interfaces/comments-store.intarface';
 import { GlobalActions } from '../../store/global/global.actions';
+import { Question } from '../../enums/comments.enum';
 
 @Component({
   selector: 'app-comments',
@@ -14,7 +16,7 @@ import { GlobalActions } from '../../store/global/global.actions';
   styleUrls: [ './comments.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommentsComponent implements OnInit {
+export class CommentsComponent {
   store = inject(Store);
 
   team = Team;
@@ -22,18 +24,22 @@ export class CommentsComponent implements OnInit {
     [Team.Team1]: this.store.selectSignal(CommentsState.getTeam1Question),
     [Team.Team2]: this.store.selectSignal(CommentsState.getTeam2Question)
   };
+  teamsCurrentQuestions = {
+    [Team.Team1]: this.store.selectSignal(CommentsState.getTeam1CurrentQuestion),
+    [Team.Team2]: this.store.selectSignal(CommentsState.getTeam2CurrentQuestion)
+  };
 
   indexTeamInAction = this.store.selectSignal(GlobalState.getIndexTeamInAction);
 
-  ngOnInit(): void {
-    this.store.dispatch(new CommentsRoundActions.SetInitialState(INITIAL_DEFAULT_COMMENTS_STATE));
-  }
-
   checkAnswer(team: Team, option: ICommentOption): void {
+    const teamCurrentQuestion: Question = this.teamsCurrentQuestions[team]();
+
     if (option.isCorrect) {
-      this.store.dispatch(new GlobalActions.SetTeamScore(team, this.teamsQuestions[team]().score));
+      this.store.dispatch(new GlobalActions.UpdateTeamScore(team, this.teamsQuestions[team]().score));
+      this.store.dispatch(new CommentsRoundActions.ChangeTeamQuestion(team, teamCurrentQuestion));
+      this.store.dispatch(new GlobalActions.ChangeTeamInAction);
     } else {
-      this.store.dispatch(new CommentsRoundActions.RemoveCommentOptionAndDecreaseScore(team, 'question1', option.videoName));
+      this.store.dispatch(new CommentsRoundActions.RemoveCommentOptionAndDecreaseScore(team, teamCurrentQuestion, option.videoName));
     }
   }
 }

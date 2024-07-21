@@ -10,6 +10,7 @@ import {
 } from '../../constants/comments-store.constant';
 import { CommentsRoundActions } from './comments.actions';
 import { Team } from '../../enums/global-state.enum';
+import { Question } from '../../enums/comments.enum';
 
 const COMMENTS_STATE_TOKEN = new StateToken<ICommentsRoundState>('COMMENTS_STATE_TOKEN');
 
@@ -23,33 +24,46 @@ export class CommentsState {
 
   @Selector()
   static getTeam1Question(state: ICommentsRoundState): ICommentQuestion {
-    return state[Team.Team1].question1;
+    return state[Team.Team1][state[Team.Team1].currentQuestion];
   }
 
   @Selector()
   static getTeam2Question(state: ICommentsRoundState): ICommentQuestion {
-    return state[Team.Team2].question1;
+    return state[Team.Team2][state[Team.Team2].currentQuestion];
+  }
+
+  @Selector()
+  static getTeam1CurrentQuestion(state: ICommentsRoundState): Question {
+    return state[Team.Team1].currentQuestion;
+  }
+
+  @Selector()
+  static getTeam2CurrentQuestion(state: ICommentsRoundState): Question {
+    return state[Team.Team2].currentQuestion;
   }
 
   @Action(CommentsRoundActions.SetInitialState)
-  setInitialState(ctx: StateContext<ICommentsRoundState>, action: CommentsRoundActions.SetInitialState) {
+  setInitialState(ctx: StateContext<ICommentsRoundState>, action: CommentsRoundActions.SetInitialState): void {
     ctx.setState(action.state);
 
     ctx.dispatch(new CommentsRoundActions.SetStateToLocalStorage());
   }
 
   @Action(CommentsRoundActions.RemoveCommentOptionAndDecreaseScore)
-  removeOption(ctx: StateContext<ICommentsRoundState>, action: CommentsRoundActions.RemoveCommentOptionAndDecreaseScore) {
+  removeOption(ctx: StateContext<ICommentsRoundState>, action: CommentsRoundActions.RemoveCommentOptionAndDecreaseScore): void {
     const state = ctx.getState();
+    const { team, question, videoName } = action;
+    const step: number = state[team][question].step + 1;
 
     ctx.setState({
       ...state,
-      [action.team]: {
-        ...state[action.team],
-        [action.question]: {
-          comment: 'new Comment',
-          score: state[action.team].question1.score - 1,
-          options: state[action.team].question1.options.filter(item => item.videoName !== action.videoName)
+      [team]: {
+        ...state[team],
+        [question]: {
+          ...state[team][question],
+          score: state[team][question].score - 1,
+          step,
+          options: state[team][question].options.filter(item => item.videoName !== videoName)
         }
       }
     });
@@ -57,8 +71,31 @@ export class CommentsState {
     ctx.dispatch(new CommentsRoundActions.SetStateToLocalStorage());
   }
 
+  @Action(CommentsRoundActions.ChangeTeamQuestion)
+  changeTeamQuestion(ctx: StateContext<ICommentsRoundState>, action: CommentsRoundActions.ChangeTeamQuestion): void {
+    const state = ctx.getState();
+    const { team, currentQuestion } = action;
+    const questions: Question[] = (Object.values(Question).filter(q => typeof q === 'number')) as Question[];
+    const currentQuestionIndex: number = questions.findIndex(q => q === currentQuestion);
+    const nextQuestion: Question = questions[currentQuestionIndex + 1];
+
+    if (nextQuestion === undefined) {
+      return;
+    } else {
+      ctx.setState({
+        ...state,
+        [team]: {
+          ...state[team],
+          currentQuestion: nextQuestion
+        }
+      });
+
+      ctx.dispatch(new CommentsRoundActions.SetStateToLocalStorage());
+    }
+  }
+
   @Action(CommentsRoundActions.SetStateToLocalStorage)
-  private setCommentsRoundStateToLocalStorage(ctx: StateContext<ICommentsRoundState>) {
-    this.localStorage.setItem(COMMENTS_ROUND_STORE_CONSTANT.localStorageKey, JSON.stringify(ctx.getState()))
+  private setCommentsRoundStateToLocalStorage(ctx: StateContext<ICommentsRoundState>): void {
+    this.localStorage.setItem(COMMENTS_ROUND_STORE_CONSTANT.localStorageKey, JSON.stringify(ctx.getState()));
   }
 }
