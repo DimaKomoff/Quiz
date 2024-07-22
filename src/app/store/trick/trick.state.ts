@@ -1,5 +1,5 @@
-import { inject, Injectable } from '@angular/core';
-import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import {
   INITIAL_DEFAULT_TRICK_STATE,
   QUESTION_COMPLEXITY_WEIGHT,
@@ -21,7 +21,6 @@ const TRICK_STATE_TOKEN = new StateToken<ITrickState>('TRICK_STATE_TOKEN');
 @Injectable()
 export class TrickState extends StateBase {
   readonly localStorageKey = TRICK_STORE_CONSTANT.localStorageKey;
-  private readonly store = inject(Store);
 
   @Action(TrickActions.SetInitialState)
   setInitialState(ctx: StateContext<ITrickState>, action: TrickActions.SetInitialState) {

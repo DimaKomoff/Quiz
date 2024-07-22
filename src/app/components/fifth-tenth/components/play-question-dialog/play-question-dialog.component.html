@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Питання: {{question.text}}</h2>
+<mat-dialog-content>
+  <div class="content">
+    <ng-container *ngIf="!isFinished; else finished">
+      {{secondsRemaining$ | async}}
+    </ng-container>
+    <ng-template #finished>
+      Чи це бал?
+    </ng-template>
+  </div>
+</mat-dialog-content>
+
+<div mat-dialog-actions>
+  <button *ngIf="!isStarted" mat-raised-button color="primary" (click)="start()">Почати</button>
+  <ng-container *ngIf="isFinished">
+    <button  mat-raised-button color="warn" (click)="incorrect()">Не бал</button>
+    <button  mat-raised-button color="primary" (click)="correct()">Бал</button>
+  </ng-container>
+</div>

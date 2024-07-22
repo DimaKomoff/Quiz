@@ -15,10 +15,15 @@ import { NgxsModule } from '@ngxs/store';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EnterTeamNamesComponent } from './components/enter-team-names/enter-team-names.component';
+import {
+  FifthTenthTaskItemComponent
+} from './components/fifth-tenth/components/fifth-tenth-task-item/fifth-tenth-task-item.component';
+import { FifthTenthComponent } from './components/fifth-tenth/fifth-tenth.component';
 import { ChooseCategoryComponent } from './components/trick/components/choose-question/choose-category.component';
 import { QuestionComponent } from './components/trick/components/question/question.component';
 import { TrickComponent } from './components/trick/trick.component';
 import { quizInitializer } from './initializers/quiz.initializer';
+import { FifthTenthState } from './store/fifth-tenth/fifth-tenth.state';
 import { GlobalState } from './store/global/global.state';
 import { TrickState } from './store/trick/trick.state';
 
@@ -28,7 +33,9 @@ import { TrickState } from './store/trick/trick.state';
     EnterTeamNamesComponent,
     TrickComponent,
     ChooseCategoryComponent,
-    QuestionComponent
+    QuestionComponent,
+    FifthTenthComponent,
+    FifthTenthTaskItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +46,8 @@ import { TrickState } from './store/trick/trick.state';
     MatListModule,
     NgxsModule.forRoot([
       GlobalState,
-      TrickState
+      TrickState,
+      FifthTenthState,
     ], {developmentMode: true}),
     FormsModule,
     MatInputModule,
@@ -58,4 +66,5 @@ import { TrickState } from './store/trick/trick.state';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

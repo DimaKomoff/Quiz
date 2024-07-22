@@ -17,7 +17,7 @@ import { ITrickCategory } from '../../../../interfaces/trick.interface';
 export class ChooseQuestionComplexityDialogComponent {
   private dialogRef = inject(MatDialogRef<ChooseQuestionComplexityDialogComponent>);
 
-  category = inject< ITrickCategory>(MAT_DIALOG_DATA)
+  category = inject<ITrickCategory>(MAT_DIALOG_DATA);
 
   questionComplexity = QuestionComplexity;
 

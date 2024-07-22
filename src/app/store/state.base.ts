@@ -1,9 +1,11 @@
 import { inject } from '@angular/core';
-import { StateContext } from '@ngxs/store';
+import { StateContext, Store } from '@ngxs/store';
 import { LocalStorageService } from '../services/local-storage.service';
 
 export abstract class StateBase {
-  protected localStorage = inject(LocalStorageService)
+  protected readonly localStorage = inject(LocalStorageService);
+
+  protected readonly store = inject(Store);
 
   abstract readonly localStorageKey: string;
 

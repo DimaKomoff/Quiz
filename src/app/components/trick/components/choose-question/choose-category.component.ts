@@ -17,7 +17,7 @@ import {
 })
 export class ChooseCategoryComponent {
   private readonly store = inject(Store);
-  private readonly dialog = inject(MatDialog)
+  private readonly dialog = inject(MatDialog);
 
   categories = this.store.selectSignal(TrickState.getRoundCategories);
 

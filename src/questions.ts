@@ -1,4 +1,5 @@
 import { QuestionComplexity } from './app/enums/trick-state.enum';
+import { IFifthTenthRoundTask } from './app/interfaces/fifth-tenth.interface';
 import { ITrickRoundTask } from './app/interfaces/trick.interface';
 
 const QUESTIONS = {
@@ -223,4 +224,11 @@ export const TRICK_ROUND_TASK: ITrickRoundTask = {
       }
     },
   ]
+}
+
+export const FIFTH_TENTH_TASK: IFifthTenthRoundTask = {
+  questions: ['question1', 'question2', 'question3', 'question4', 'question5', 'question6'].map(question => ({
+    text: question,
+    isPlayed: false
+  })),
 }
