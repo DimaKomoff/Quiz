@@ -1,5 +1,5 @@
 <mat-card
-  *ngFor="let category of roundTask().categories"
+  *ngFor="let category of categories()"
   class="category-card"
   appearance="outlined"
   (click)="chooseQuestionComplexity(category)">

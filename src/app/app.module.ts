@@ -2,21 +2,24 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatLineModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxsModule } from '@ngxs/store';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxsModule } from '@ngxs/store';
+import { EnterTeamNamesComponent } from './components/enter-team-names/enter-team-names.component';
+import { ChooseCategoryComponent } from './components/trick/components/choose-question/choose-category.component';
+import { QuestionComponent } from './components/trick/components/question/question.component';
+import { TrickComponent } from './components/trick/trick.component';
 import { quizInitializer } from './initializers/quiz.initializer';
 import { GlobalState } from './store/global/global.state';
-import { EnterTeamNamesComponent } from './components/enter-team-names/enter-team-names.component';
-import { TrickComponent } from './components/trick/trick.component';
-import { ChooseQuestionComponent } from './components/trick/components/choose-question/choose-question.component';
 import { TrickState } from './store/trick/trick.state';
 
 @NgModule({
@@ -24,7 +27,8 @@ import { TrickState } from './store/trick/trick.state';
     AppComponent,
     EnterTeamNamesComponent,
     TrickComponent,
-    ChooseQuestionComponent
+    ChooseCategoryComponent,
+    QuestionComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +45,9 @@ import { TrickState } from './store/trick/trick.state';
     MatInputModule,
     ReactiveFormsModule,
     MatRadioModule,
-    MatDialogModule
+    MatDialogModule,
+    MatToolbarModule,
+    MatLineModule
   ],
   providers: [
     {

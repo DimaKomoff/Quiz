@@ -1,7 +1,10 @@
-import { state } from '@angular/animations';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
-import { GLOBAL_STORE_CONSTANT, INITIAL_DEFAULT_GLOBAL_STATE } from '../../constants/global-store.constant';
+import {
+  GLOBAL_STORE_CONSTANT,
+  INITIAL_DEFAULT_GLOBAL_STATE,
+  ROUND_NAMES
+} from '../../constants/global-store.constant';
 import { RoundName, Team } from '../../enums/global-state.enum';
 import { IGlobalState, ITeam } from '../../interfaces/global-store.interface';
 import { StateBase } from '../state.base';
@@ -26,9 +29,15 @@ export class GlobalState extends StateBase {
   @Action(GlobalActions.SetRound)
   setRound(ctx: StateContext<IGlobalState>, action: GlobalActions.SetRound) {
     const state = ctx.getState();
+
+    const team1Score = state.teams[Team.Team1].score;
+    const team2Score = state.teams[Team.Team2].score;
+    const teamInAction = team2Score > team1Score ? Team.Team2 : Team.Team1;
+
     ctx.setState({
       ...state,
-      round: action.round
+      round: action.round,
+      teamInAction
     });
 
     this.setStateToLocalStorage(ctx);
@@ -76,6 +85,26 @@ export class GlobalState extends StateBase {
     this.setStateToLocalStorage(ctx);
   }
 
+  @Action(GlobalActions.UpdateCurrentTeamScore)
+  updateCurrentTeamScore(ctx: StateContext<IGlobalState>, action: GlobalActions.UpdateCurrentTeamScore) {
+    const state = ctx.getState();
+
+    const teamInAction = state.teamInAction as Team
+    ctx.setState({
+      ...state,
+      teams: {
+        ...state.teams,
+        [teamInAction]: {
+          ...state.teams[teamInAction],
+          score: state.teams[teamInAction].score + action.score
+        }
+      }
+
+    });
+
+    this.setStateToLocalStorage(ctx);
+  }
+
   @Action(GlobalActions.ChangeTeamInAction)
   changeTeamInAction(ctx: StateContext<IGlobalState>) {
     const state = ctx.getState();
@@ -97,6 +126,16 @@ export class GlobalState extends StateBase {
   @Selector()
   static getRound(state: IGlobalState): RoundName | null {
     return state.round;
+  }
+
+  @Selector()
+  static getRoundName(state: IGlobalState): string {
+    return ROUND_NAMES.get(state.round as RoundName) as string;
+  }
+
+  @Selector()
+  static getTeamsList(state: IGlobalState): ITeam[] {
+    return Object.values(state.teams).map(t => t);
   }
 
   @Selector()

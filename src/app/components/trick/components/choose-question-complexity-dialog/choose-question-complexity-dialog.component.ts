@@ -23,6 +23,5 @@ export class ChooseQuestionComplexityDialogComponent {
 
   chooseQuestionComplexity(complexity: QuestionComplexity) {
     this.dialogRef.close(complexity);
-    console.log(this.category);
   }
 }

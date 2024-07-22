@@ -1,6 +1,6 @@
-import { Component, inject, OnInit, Signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { INITIAL_DEFAULT_TRICK_STATE, TRICK_STORE_CONSTANT } from '../../constants/trick-store.constant';
+import { TRICK_STORE_CONSTANT } from '../../constants/trick-store.constant';
 import { TrickRoundStatus } from '../../enums/trick-state.enum';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { GlobalActions } from '../../store/global/global.actions';
@@ -12,7 +12,7 @@ import { TrickState } from '../../store/trick/trick.state';
   templateUrl: './trick.component.html',
   styleUrls: ['./trick.component.scss']
 })
-export class TrickComponent {
+export class TrickComponent implements OnInit {
   private readonly localStorage = inject(LocalStorageService);
   private readonly store = inject(Store);
 
@@ -20,9 +20,7 @@ export class TrickComponent {
 
   roundStatus = this.store.selectSignal(TrickState.getRoundStatus);
 
-
-
-  constructor() {
+  ngOnInit() {
     const localStorageState = this.localStorage.getItem(TRICK_STORE_CONSTANT.localStorageKey);
     if (localStorageState) {
       this.store.dispatch(new TrickActions.SetInitialState(JSON.parse(localStorageState)));

@@ -28,6 +28,12 @@ export namespace GlobalActions {
     constructor(public team: Team, public score: number) {}
   }
 
+  export class UpdateCurrentTeamScore {
+    static readonly type = `${ACTION_SCOPE} Update Team Score`;
+
+    constructor(public score: number) {}
+  }
+
   export class ChangeTeamInAction {
     static readonly type = `${ACTION_SCOPE} Change team in action`;
   }

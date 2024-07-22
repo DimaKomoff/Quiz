@@ -1,0 +1,20 @@
+<div>
+  <div class="qa-wrapper">
+    <mat-label><b>Питання: </b></mat-label>
+    <span>
+      {{ question().question }}
+    </span>
+  </div>
+
+  <div class="qa-wrapper">
+    <mat-label><b>Правильна відповідь: </b></mat-label>
+    <span>
+      {{ question().answer }}
+    </span>
+  </div>
+
+  <div class="actions">
+    <button mat-raised-button color="warn" (click)="markIncorrect()">Incorrect</button>
+    <button mat-raised-button color="primary" (click)="markCorrect()">Correct</button>
+  </div>
+</div>
