@@ -1,20 +1,25 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
-import { GLOBAL_STORE_CONSTANT } from '../../constants/global-store.constant';
+import {
+  GLOBAL_STORE_CONSTANT,
+  INITIAL_DEFAULT_GLOBAL_STATE,
+  ROUND_NAMES
+} from '../../constants/global-store.constant';
 import { RoundName, Team } from '../../enums/global-state.enum';
 import { IGlobalState, ITeam } from '../../interfaces/global-store.interface';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { StateBase } from '../state.base';
 import { GlobalActions } from './global.actions';
 
 
 const GLOBAL_STATE_TOKEN = new StateToken<IGlobalState>('GLOBAL_STATE_TOKEN');
 
 @State<IGlobalState>({
-  name: GLOBAL_STATE_TOKEN
+  name: GLOBAL_STATE_TOKEN,
+  defaults: INITIAL_DEFAULT_GLOBAL_STATE
 })
 @Injectable()
-export class GlobalState {
-  private readonly localStorage = inject(LocalStorageService);
+export class GlobalState extends StateBase {
+  readonly localStorageKey: string = GLOBAL_STORE_CONSTANT.localStorageKey;
 
   @Action(GlobalActions.SetInitialState)
   setInitialState(ctx: StateContext<IGlobalState>, action: GlobalActions.SetInitialState) {
@@ -24,12 +29,18 @@ export class GlobalState {
   @Action(GlobalActions.SetRound)
   setRound(ctx: StateContext<IGlobalState>, action: GlobalActions.SetRound) {
     const state = ctx.getState();
+
+    const team1Score = state.teams[Team.Team1].score;
+    const team2Score = state.teams[Team.Team2].score;
+    const teamInAction = team2Score > team1Score ? Team.Team2 : Team.Team1;
+
     ctx.setState({
       ...state,
-      round: action.round
+      round: action.round,
+      teamInAction
     });
 
-    ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
+    this.setStateToLocalStorage(ctx);
   }
 
   @Action(GlobalActions.StartGame)
@@ -51,7 +62,7 @@ export class GlobalState {
       teamInAction: action.startingTeam
     });
 
-    ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
+    this.setStateToLocalStorage(ctx);
   }
 
   @Action(GlobalActions.SetTeamScore)
@@ -71,7 +82,27 @@ export class GlobalState {
 
     });
 
-    ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
+    this.setStateToLocalStorage(ctx);
+  }
+
+  @Action(GlobalActions.UpdateCurrentTeamScore)
+  updateCurrentTeamScore(ctx: StateContext<IGlobalState>, action: GlobalActions.UpdateCurrentTeamScore) {
+    const state = ctx.getState();
+
+    const teamInAction = state.teamInAction as Team
+    ctx.setState({
+      ...state,
+      teams: {
+        ...state.teams,
+        [teamInAction]: {
+          ...state.teams[teamInAction],
+          score: state.teams[teamInAction].score + action.score
+        }
+      }
+
+    });
+
+    this.setStateToLocalStorage(ctx);
   }
 
   @Action(GlobalActions.ChangeTeamInAction)
@@ -89,12 +120,22 @@ export class GlobalState {
       teamInAction: teams[nextIndex] as Team
     });
 
-    ctx.dispatch(new GlobalActions.SetStateToLocalStorage());
+    this.setStateToLocalStorage(ctx);
   }
 
   @Selector()
   static getRound(state: IGlobalState): RoundName | null {
     return state.round;
+  }
+
+  @Selector()
+  static getRoundName(state: IGlobalState): string {
+    return ROUND_NAMES.get(state.round as RoundName) as string;
+  }
+
+  @Selector()
+  static getTeamsList(state: IGlobalState): ITeam[] {
+    return Object.values(state.teams).map(t => t);
   }
 
   @Selector()
@@ -110,10 +151,5 @@ export class GlobalState {
   @Selector()
   static getTeamInAction(state: IGlobalState): ITeam {
     return state.teams[state.teamInAction as Team];
-  }
-
-  @Action(GlobalActions.SetStateToLocalStorage)
-  private setGlobalStateToLocalStorage(ctx: StateContext<IGlobalState>) {
-    this.localStorage.setItem(GLOBAL_STORE_CONSTANT.localStorageKey, JSON.stringify(ctx.getState()))
   }
 }

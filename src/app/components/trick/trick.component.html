@@ -1,2 +1,3 @@
-<p>trick works!</p>
-<button (click)="changeTeam()">asdasd</button>
+<app-choose-category *ngIf="roundStatus() === roundStatusName.ChoosingQuestion"></app-choose-category>
+
+<app-question *ngIf="roundStatus() === roundStatusName.Play"></app-question>

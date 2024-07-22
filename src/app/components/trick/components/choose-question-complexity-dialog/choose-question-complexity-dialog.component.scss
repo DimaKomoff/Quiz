@@ -1,0 +1,15 @@
+@use '@angular/material' as mat;
+
+.content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+
+.card {
+  cursor: pointer;
+  &:hover {
+    @include mat.elevation(3);
+  }
+}

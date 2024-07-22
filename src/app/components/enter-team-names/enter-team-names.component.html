@@ -1,37 +1,29 @@
 <form [formGroup]="form" (submit)="enterTeamNames()">
-  <mat-card appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>Введіть назви команд</mat-card-title>
-    </mat-card-header>
-    <mat-divider></mat-divider>
-    <mat-card-content>
-      <div class="team-inputs-wrapper">
-        <mat-form-field>
-          <mat-label>Команда 1</mat-label>
-          <input type="email" matInput [formControl]="team1NameFC" placeholder="Команда 1">
+  <div class="team-inputs-wrapper">
+    <mat-form-field>
+      <mat-label>Команда 1</mat-label>
+      <input type="email" matInput [formControl]="team1NameFC" placeholder="Команда 1">
 
-          <mat-error *ngIf="false">Please enter a valid email address</mat-error>
-        </mat-form-field>
+      <mat-error *ngIf="false">Please enter a valid email address</mat-error>
+    </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Команда 2</mat-label>
-          <input type="email" matInput [formControl]="team2NameFC" placeholder="Команда 2">
+    <mat-form-field>
+      <mat-label>Команда 2</mat-label>
+      <input type="email" matInput [formControl]="team2NameFC" placeholder="Команда 2">
 
-          <mat-error *ngIf="false">Please enter a valid email address</mat-error>
-        </mat-form-field>
-      </div>
+      <mat-error *ngIf="false">Please enter a valid email address</mat-error>
+    </mat-form-field>
+  </div>
 
-      <div class="radio-buttons-wrapper">
-        <label id="example-radio-group-label">Яка команда розпочинає гру?</label>
+  <div class="radio-buttons-wrapper">
+    <label id="example-radio-group-label">Яка команда розпочинає гру?</label>
 
-        <mat-radio-group [formControl]="startingTeam" color="primary" aria-label="Select an option">
-          <mat-radio-button [value]="team.Team1">{{team1Name}}</mat-radio-button>
-          <mat-radio-button [value]="team.Team2">{{team2Name}}</mat-radio-button>
-        </mat-radio-group>
-      </div>
-    </mat-card-content>
-    <mat-card-actions>
-      <button [disabled]="form.invalid" mat-raised-button color="primary">Готово</button>
-    </mat-card-actions>
-  </mat-card>
+    <mat-radio-group [formControl]="startingTeam" color="primary" aria-label="Select an option">
+      <mat-radio-button [value]="team.Team1">{{team1Name}}</mat-radio-button>
+      <mat-radio-button [value]="team.Team2">{{team2Name}}</mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <mat-card-actions>
+    <button [disabled]="form.invalid" mat-raised-button color="primary">Готово</button>
+  </mat-card-actions>
 </form>
