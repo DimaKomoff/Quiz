@@ -6,13 +6,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 16px;
     }
 
     .mat-mdc-card-footer {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 16px 16px 8px;
+
+      button {
+        min-width: calc(50% - 8px);
+      }
     }
   }
 }

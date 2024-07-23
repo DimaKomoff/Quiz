@@ -28,6 +28,7 @@ import { GlobalState } from './store/global/global.state';
 import { TrickState } from './store/trick/trick.state';
 import { CommentsComponent } from './components/comments/comments.component';
 import { CommentsState } from './store/comments/comments.state';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { CommentsState } from './store/comments/comments.state';
     MatRadioModule,
     MatDialogModule,
     MatToolbarModule,
-    MatLineModule
+    MatLineModule,
+    MatSnackBarModule
   ],
   providers: [
     {

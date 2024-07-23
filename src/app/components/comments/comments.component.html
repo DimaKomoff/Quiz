@@ -1,11 +1,11 @@
 <mat-card appearance="outlined">
   <mat-card-content>
     <ng-container *ngIf="teamsQuestions[indexTeamInAction()]() as question">
-      {{ question.comments[question.step] || 'Програш' }}
+      {{ question.comments[question.step] }}
     </ng-container>
   </mat-card-content>
   <mat-card-footer>
-    <ng-container *ngFor="let option of teamsQuestions[indexTeamInAction()]().options">
+    <ng-container *ngFor="let option of teamsQuestions[indexTeamInAction()]()?.options">
       <button mat-raised-button color="warn" (click)="checkAnswer(indexTeamInAction(), option)">
         {{ option.videoName }}
       </button>

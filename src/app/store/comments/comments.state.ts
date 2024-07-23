@@ -1,9 +1,8 @@
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { ICommentQuestion, ICommentsRoundState } from '../../interfaces/comments-store.intarface';
-import { LocalStorageService } from '../../services/local-storage.service';
 import {
   COMMENTS_ROUND_STORE_CONSTANT,
   INITIAL_DEFAULT_COMMENTS_STATE
@@ -11,16 +10,17 @@ import {
 import { CommentsRoundActions } from './comments.actions';
 import { Team } from '../../enums/global-state.enum';
 import { Question } from '../../enums/comments.enum';
+import { StateBase } from '../state.base';
 
 const COMMENTS_STATE_TOKEN = new StateToken<ICommentsRoundState>('COMMENTS_STATE_TOKEN');
 
-@State({
+@State<ICommentsRoundState>({
   name: COMMENTS_STATE_TOKEN,
   defaults: INITIAL_DEFAULT_COMMENTS_STATE
 })
 @Injectable()
-export class CommentsState {
-  private readonly localStorage = inject(LocalStorageService);
+export class CommentsState extends StateBase {
+  readonly localStorageKey = COMMENTS_ROUND_STORE_CONSTANT.localStorageKey;
 
   @Selector()
   static getTeam1Question(state: ICommentsRoundState): ICommentQuestion {
@@ -45,8 +45,6 @@ export class CommentsState {
   @Action(CommentsRoundActions.SetInitialState)
   setInitialState(ctx: StateContext<ICommentsRoundState>, action: CommentsRoundActions.SetInitialState): void {
     ctx.setState(action.state);
-
-    ctx.dispatch(new CommentsRoundActions.SetStateToLocalStorage());
   }
 
   @Action(CommentsRoundActions.RemoveCommentOptionAndDecreaseScore)
@@ -68,7 +66,7 @@ export class CommentsState {
       }
     });
 
-    ctx.dispatch(new CommentsRoundActions.SetStateToLocalStorage());
+    this.setStateToLocalStorage(ctx);
   }
 
   @Action(CommentsRoundActions.ChangeTeamQuestion)
@@ -78,24 +76,16 @@ export class CommentsState {
     const questions: Question[] = (Object.values(Question).filter(q => typeof q === 'number')) as Question[];
     const currentQuestionIndex: number = questions.findIndex(q => q === currentQuestion);
     const nextQuestion: Question = questions[currentQuestionIndex + 1];
+    console.log('nextQuestion: ', nextQuestion);
 
-    if (nextQuestion === undefined) {
-      return;
-    } else {
-      ctx.setState({
-        ...state,
-        [team]: {
-          ...state[team],
-          currentQuestion: nextQuestion
-        }
-      });
+    ctx.setState({
+      ...state,
+      [team]: {
+        ...state[team],
+        currentQuestion: nextQuestion || null
+      }
+    });
 
-      ctx.dispatch(new CommentsRoundActions.SetStateToLocalStorage());
-    }
-  }
-
-  @Action(CommentsRoundActions.SetStateToLocalStorage)
-  private setCommentsRoundStateToLocalStorage(ctx: StateContext<ICommentsRoundState>): void {
-    this.localStorage.setItem(COMMENTS_ROUND_STORE_CONSTANT.localStorageKey, JSON.stringify(ctx.getState()));
+    this.setStateToLocalStorage(ctx);
   }
 }
