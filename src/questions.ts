@@ -1,4 +1,7 @@
+import { WordsList } from './app/enums/alias.enum';
+import { Team } from './app/enums/global-state.enum';
 import { QuestionComplexity } from './app/enums/trick-state.enum';
+import { AliasTasks, AliasWords } from './app/interfaces/alias.interface';
 import { IFifthTenthRoundTask } from './app/interfaces/fifth-tenth.interface';
 import { ITrickRoundTask } from './app/interfaces/trick.interface';
 
@@ -231,4 +234,20 @@ export const FIFTH_TENTH_TASK: IFifthTenthRoundTask = {
     text: question,
     isPlayed: false
   })),
+}
+
+const words = new Array(15).fill(null).map((_, index) => ({
+  text: `Word ${index + 1}`,
+  isPlayed: false
+})) as AliasWords;
+
+export const ALIAS_TASK: AliasTasks = {
+  [Team.Team1]: {
+    [WordsList.First]: words,
+    [WordsList.Second]: words
+  },
+  [Team.Team2]: {
+    [WordsList.First]: words,
+    [WordsList.Second]: words
+  },
 }
