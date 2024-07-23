@@ -1,3 +1,28 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.quiz-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.round-card {
+  width: 100%;
+  max-width: 1200px;
+  margin: 10px;
+}
+
+.actions {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.actions button {
+  margin: 0 10px;
+}
+
 .footer {
   .footer-actions-wrapper {
     button + button {

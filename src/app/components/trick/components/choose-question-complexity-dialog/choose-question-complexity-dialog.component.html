@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Категорія: {{category.name}}</h2>
+<mat-dialog-content>
+  <h3>Виберіть складність питання</h3>
+  <div class="content">
+    <mat-card
+      class="card"
+      appearance="outlined"
+      (click)="chooseQuestionComplexity(questionComplexity.Simple)">
+      <mat-card-header>
+        <mat-card-content>
+          <h3>Просте</h3>
+        </mat-card-content>
+      </mat-card-header>
+    </mat-card>
+
+    <mat-card
+      class="card"
+      appearance="outlined"
+      (click)="chooseQuestionComplexity(questionComplexity.Complicated)">
+      <mat-card-header>
+        <mat-card-content>
+          <h3>Скадне</h3>
+        </mat-card-content>
+      </mat-card-header>
+    </mat-card>
+  </div>
+</mat-dialog-content>

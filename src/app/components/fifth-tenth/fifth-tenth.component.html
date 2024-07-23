@@ -1,0 +1,5 @@
+<app-fifth-tenth-task-item
+  *ngFor="let question of questions(); let i = index"
+  [question]="question"
+  (playQuestion)="onQuestionPlay(i, question)"
+></app-fifth-tenth-task-item>

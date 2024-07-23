@@ -1,1 +1,3 @@
-<p>trick works!</p>
+<app-choose-category *ngIf="roundStatus() === roundStatusName.ChoosingQuestion"></app-choose-category>
+
+<app-question *ngIf="roundStatus() === roundStatusName.Play"></app-question>

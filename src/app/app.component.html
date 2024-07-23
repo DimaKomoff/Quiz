@@ -1,10 +1,42 @@
-<h1 class="mat-display-1">Вікторина</h1>
-<div *ngIf="teamInAction() as team">
-  <p>Грає команда - <b>{{ team.name }}</b></p>
+<mat-toolbar color="primary">
+  <span>Вікторина</span>
+  <span class="spacer"></span>
+  <ng-container>
+    <span>Загальний рахунок:</span>
+    <mat-list *ngIf="round() !== null">
+      <mat-list-item *ngFor="let team of teamsList()">
+        {{ team.name }}: {{ team.score }}
+      </mat-list-item>
+    </mat-list>
+  </ng-container>
+</mat-toolbar>
+
+<mat-toolbar *ngIf="round() !== null" color="accent" class="sub-toolbar">
+  <span>Команда в грі: {{ teamInAction().name }}</span>
+  <span class="spacer"></span>
+  <span>Раунд: {{ currentRoundName() }}</span>
+</mat-toolbar>
+
+<div class="quiz-container">
+  <mat-card class="round-card">
+    <mat-card-header>
+      <mat-card-title>
+        <ng-container *ngIf="round() !== null; else gameDoesNotStart">
+          {{ currentRoundName() }}
+        </ng-container>
+        <ng-template #gameDoesNotStart>
+          Виберіть назви для своїх команд та хто починає
+        </ng-template>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <app-enter-team-names *ngIf="round() === null"></app-enter-team-names>
+      <app-trick *ngIf="round() === roundName.Trick"></app-trick>
+      <app-fifth-tenth *ngIf="round() === roundName.FifthTenth"></app-fifth-tenth>
+      <app-comments *ngIf="round() === roundName.Comments"></app-comments>
+    </mat-card-content>
+  </mat-card>
 </div>
-<app-enter-team-names *ngIf="round() === null"></app-enter-team-names>
-<app-trick *ngIf="round() === roundName.Trick"></app-trick>
-<app-comments *ngIf="round() === roundName.Comments"></app-comments>
 
 <footer *ngIf="round() !== null" class="footer">
   <div class="footer-actions-wrapper">
