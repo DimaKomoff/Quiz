@@ -26,6 +26,7 @@ import { quizInitializer } from './initializers/quiz.initializer';
 import { FifthTenthState } from './store/fifth-tenth/fifth-tenth.state';
 import { GlobalState } from './store/global/global.state';
 import { TrickState } from './store/trick/trick.state';
+import { AliasComponent } from './components/alias/alias.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { TrickState } from './store/trick/trick.state';
     QuestionComponent,
     FifthTenthComponent,
     FifthTenthTaskItemComponent,
+    AliasComponent,
   ],
   imports: [
     BrowserModule,
