@@ -1,5 +1,4 @@
 import { ALIAS_TASK } from '../../questions';
-import { AliasLap, WordsList } from '../enums/alias.enum';
 import { IAliasState } from '../interfaces/alias.interface';
 
 export const ALIAS_STORE_CONSTANT = {
@@ -7,7 +6,10 @@ export const ALIAS_STORE_CONSTANT = {
 }
 
 export const INITIAL_DEFAULT_ALIAS_STATE: IAliasState = {
-  currentLap: AliasLap.First,
-  currentList: WordsList.First,
+  halfLapPlayedNumber: 0,
   tasks: ALIAS_TASK
 };
+
+export const ALIAS_WORD_COST = 1;
+
+export const ALIAS_ROUND_LAPS_NUMBER = 2;

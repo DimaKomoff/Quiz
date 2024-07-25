@@ -1,4 +1,3 @@
-import { AliasLap, WordsList } from '../enums/alias.enum';
 import { Team } from '../enums/global-state.enum';
 
 export interface IAliasWord {
@@ -6,34 +5,13 @@ export interface IAliasWord {
   isPlayed: boolean;
 }
 
-export type AliasWords = [
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-  IAliasWord,
-];
-
-export type AliasTeamTask = {
-  [key in WordsList]: AliasWords;
-}
+export type AliasWords = IAliasWord[];
 
 export type AliasTasks = {
-  [key in Team]: AliasTeamTask;
+  [key in Team]: AliasWords[];
 }
 
 export interface IAliasState {
-  currentLap: AliasLap;
-  currentList: WordsList;
+  halfLapPlayedNumber: number;
   tasks: AliasTasks;
 }

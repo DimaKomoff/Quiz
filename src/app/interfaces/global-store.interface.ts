@@ -9,6 +9,6 @@ export type IGlobalState =  & {
   round: RoundName | null;
   teamInAction: Team | null;
   teams: {
-    [key in Team]: ITeam
+    [key in Team]: ITeam;
   }
 };

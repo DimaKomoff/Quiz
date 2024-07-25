@@ -152,4 +152,9 @@ export class GlobalState extends StateBase {
   static getTeamInAction(state: IGlobalState): ITeam {
     return state.teams[state.teamInAction as Team];
   }
+
+  @Selector()
+  static getTeamInActionIndex(state: IGlobalState): Team {
+    return state.teamInAction as Team;
+  }
 }

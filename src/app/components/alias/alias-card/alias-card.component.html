@@ -1,0 +1,13 @@
+<mat-card
+  class="alias-card"
+  [class.is-played]="word.isPlayed"
+  appearance="outlined">
+  <mat-card-content>
+    <h2>{{word.text}}</h2>
+  </mat-card-content>
+
+  <mat-card-actions *ngIf="!word.isPlayed && lapInAction">
+    <button mat-raised-button color="warn" (click)="skipped.emit()">Пропуск</button>
+    <button mat-raised-button color="primary" (click)="answered.emit()">Правильно</button>
+  </mat-card-actions>
+</mat-card>

@@ -1,9 +1,5 @@
-.task-item {
-  height: 100%;
+.alias-card {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   &.is-played {
     opacity: 0.5;
 
@@ -18,5 +14,9 @@
       border-color: inherit;
       transform:rotate(-15deg);
     }
+  }
+
+  mat-card-actions {
+    gap: 16px;
   }
 }

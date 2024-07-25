@@ -1,1 +1,29 @@
-<p>alias works!</p>
+<div class="timer-wrapper">
+  {{ countdown$ | async }}
+
+  <button
+    *ngIf="!timerIsRunning && !timerFinished"
+    mat-raised-button color="accent"
+    (click)="startTimer()">
+    Почати!
+  </button>
+
+  <button
+    *ngIf="timerFinished"
+    mat-raised-button color="accent"
+    (click)="finishHalfLap()">
+    Закінчити Спробу
+  </button>
+</div>
+
+<div class="alias-words-lists">
+  <div *ngFor="let wordsList of wordsLists$ | async; let listIndex = index" class="words-list">
+    <app-alias-card
+      *ngFor="let word of wordsList; let wordIndex = index"
+      [word]="word"
+      [lapInAction]="lapInAction"
+      (skipped)="skipped(listIndex, wordIndex)"
+      (answered)="correct(listIndex, wordIndex)"
+    ></app-alias-card>
+  </div>
+</div>

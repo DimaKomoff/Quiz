@@ -1,0 +1,20 @@
+.timer-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 50px;
+  gap: 16px;
+}
+
+.alias-words-lists {
+  display: flex;
+  justify-content: space-around;
+
+  .words-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
