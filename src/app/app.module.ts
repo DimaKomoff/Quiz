@@ -23,9 +23,12 @@ import { ChooseCategoryComponent } from './components/trick/components/choose-qu
 import { QuestionComponent } from './components/trick/components/question/question.component';
 import { TrickComponent } from './components/trick/trick.component';
 import { quizInitializer } from './initializers/quiz.initializer';
+import { AliasState } from './store/alias/alias.state';
 import { FifthTenthState } from './store/fifth-tenth/fifth-tenth.state';
 import { GlobalState } from './store/global/global.state';
 import { TrickState } from './store/trick/trick.state';
+import { AliasComponent } from './components/alias/alias.component';
+import { AliasCardComponent } from './components/alias/alias-card/alias-card.component';
 import { CommentsComponent } from './components/comments/comments.component';
 import { CommentsState } from './store/comments/comments.state';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -39,6 +42,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     QuestionComponent,
     FifthTenthComponent,
     FifthTenthTaskItemComponent,
+    AliasComponent,
+    AliasCardComponent,
     CommentsComponent
   ],
   imports: [
@@ -53,6 +58,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
       TrickState,
       CommentsState,
       FifthTenthState,
+      AliasState,
     ], {developmentMode: true}),
     FormsModule,
     MatInputModule,

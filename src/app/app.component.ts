@@ -1,17 +1,19 @@
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { RoundName } from './enums/global-state.enum';
+import { HeaderService } from './services/header.service';
 import { GlobalState } from './store/global/global.state';
-import { GlobalActions } from './store/global/global.actions';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: [ './app.component.scss' ]
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   private readonly store = inject(Store);
-  title = 'Вікторина';
+  private readonly headerService = inject(HeaderService);
+
+  @ViewChild('header') headerElementRef!: ElementRef<Element>;
 
   roundName = RoundName;
 
@@ -20,15 +22,7 @@ export class AppComponent {
   currentRoundName = this.store.selectSignal(GlobalState.getRoundName);
   teamsList = this.store.selectSignal(GlobalState.getTeamsList);
 
-  changeTeam(): void {
-    this.store.dispatch(new GlobalActions.ChangeTeamInAction());
-  }
-
-  nextRound(): void {
-    const nextRound = Object.values(RoundName).find(r => r === this.round() as RoundName + 1);
-
-    if (nextRound !== undefined) {
-      this.store.dispatch(new GlobalActions.SetRound(nextRound as RoundName));
-    }
+  ngAfterViewInit(): void {
+    this.headerService.setHeaderHeight(this.headerElementRef.nativeElement.clientHeight)
   }
 }

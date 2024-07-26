@@ -31,7 +31,9 @@ export class PlayQuestionDialogComponent {
 
   isFinished = false;
 
-  countdown = this.countdownService.getCountdown(10);
+  countdown = this.countdownService.getCountdown(10, () => {
+    this.isFinished = true;
+  });
 
   secondsRemaining$ = this.countdown.countdown$.pipe(
     finalize(() => {

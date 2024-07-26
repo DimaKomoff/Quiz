@@ -1,17 +1,16 @@
-import { Store } from '@ngxs/store';
-import { MatSnackBar } from '@angular/material/snack-bar';
-
 import { ChangeDetectionStrategy, Component, inject, OnInit, Signal } from '@angular/core';
-
-import { CommentsRoundActions } from '../../store/comments/comments.actions';
-import { GlobalState } from '../../store/global/global.state';
-import { CommentsState } from '../../store/comments/comments.state';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store } from '@ngxs/store';
+import { COMMENTS_ROUND_STORE_CONSTANT } from '../../constants/comments-store.constant';
+import { Question } from '../../enums/comments.enum';
 import { RoundName, Team } from '../../enums/global-state.enum';
 import { ICommentOption } from '../../interfaces/comments-store.intarface';
-import { GlobalActions } from '../../store/global/global.actions';
-import { Question } from '../../enums/comments.enum';
 import { LocalStorageService } from '../../services/local-storage.service';
-import { COMMENTS_ROUND_STORE_CONSTANT } from '../../constants/comments-store.constant';
+
+import { CommentsRoundActions } from '../../store/comments/comments.actions';
+import { CommentsState } from '../../store/comments/comments.state';
+import { GlobalActions } from '../../store/global/global.actions';
+import { GlobalState } from '../../store/global/global.state';
 
 @Component({
   selector: 'app-comments',
@@ -34,7 +33,7 @@ export class CommentsComponent implements OnInit {
   };
 
   round = this._store.selectSignal(GlobalState.getRound);
-  indexTeamInAction = this._store.selectSignal(GlobalState.getIndexTeamInAction);
+  indexTeamInAction = this._store.selectSignal(GlobalState.getTeamInActionIndex);
 
   constructor(private _snackBar: MatSnackBar) {}
 
@@ -51,7 +50,11 @@ export class CommentsComponent implements OnInit {
     if (option.isCorrect) {
       this._store.dispatch(new GlobalActions.UpdateCurrentTeamScore(this.teamsQuestions[team]().score));
       this._store.dispatch(new CommentsRoundActions.ChangeTeamQuestion(team, teamCurrentQuestion));
-      this.isRoundOver() && this.goToNextRound();
+      if (this.isRoundOver) {
+        this.goToNextRound();
+
+        return;
+      }
       this._store.dispatch(new GlobalActions.ChangeTeamInAction());
     } else {
       this._store.dispatch(new CommentsRoundActions.RemoveCommentOptionAndDecreaseScore(team, teamCurrentQuestion, option.videoName));
@@ -59,7 +62,11 @@ export class CommentsComponent implements OnInit {
       if (this.teamsQuestions[this.indexTeamInAction()]().options.length === 1) {
         this._store.dispatch(new GlobalActions.UpdateCurrentTeamScore(1));
         this._store.dispatch(new CommentsRoundActions.ChangeTeamQuestion(team, teamCurrentQuestion));
-        this.isRoundOver() && this.goToNextRound();
+        if (this.isRoundOver) {
+          this.goToNextRound();
+
+          return;
+        }
         this._store.dispatch(new GlobalActions.ChangeTeamInAction());
       }
     }
@@ -67,16 +74,13 @@ export class CommentsComponent implements OnInit {
     this.openSnackBar(option.isCorrect ? 'Вірно' : 'Невірно');
   }
 
-  private isRoundOver(): boolean {
+  private get isRoundOver(): boolean {
     return Object.values(this.teamsCurrentQuestions).every((currentQuestion: Signal<Question>) => currentQuestion() === null);
   }
 
   private goToNextRound(): void {
-    const nextRound = Object.values(RoundName).find(r => r === this.round() as RoundName + 1);
-
-    if (nextRound !== undefined) {
-      this._store.dispatch(new GlobalActions.SetRound(nextRound as RoundName));
-    }
+    this._store.dispatch(new GlobalActions.SetRound(RoundName.FifthTenth));
+    this._localStorage.removeItem(COMMENTS_ROUND_STORE_CONSTANT.localStorageKey)
   }
 
   private openSnackBar(message: string): void {

@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Результати Гри</h1>
+<div mat-dialog-content>
+  <mat-list>
+    <mat-list-item >
+      <span>{{team1.name}}: {{ team1.score }}</span>
+    </mat-list-item>
+    <mat-list-item>
+      <span>{{team2.name}}: {{ team2.score }}</span>
+    </mat-list-item>
+  </mat-list>
+  <h2>
+    <ng-container *ngIf="team1.score !== team2.score; else drawScore">
+      Перемогла команда {{team1.score > team2.score ? team1.name : team2.name}}
+    </ng-container>
+    <ng-template #drawScore>Нічия</ng-template>
+  </h2>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="dialogRef.close()">Закрити</button>
+</div>
