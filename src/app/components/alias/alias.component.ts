@@ -4,6 +4,7 @@ import { map, mergeMap } from 'rxjs';
 import { ALIAS_STORE_CONSTANT } from '../../constants/alias.constant';
 import { Team } from '../../enums/global-state.enum';
 import { CountdownService } from '../../services/countdown.service';
+import { HeaderService } from '../../services/header.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { AliasActions } from '../../store/alias/alias.actions';
 import { AliasState } from '../../store/alias/alias.state';
@@ -18,6 +19,13 @@ export class AliasComponent implements OnInit {
   private readonly localStorage = inject(LocalStorageService);
   private readonly store = inject(Store);
   private readonly countdownService = inject(CountdownService);
+  private readonly headerService = inject(HeaderService);
+
+  timerStyles$ = this.headerService.headerHeight$.pipe(
+    map(val => ({
+      top: `${val + 50}px`
+    })),
+  );
 
   private readonly roundFinished = () => {
     this.timerIsRunning = false;

@@ -1,4 +1,4 @@
-<div class="timer-wrapper">
+<div [ngStyle]="timerStyles$| async" class="timer-wrapper">
   {{ countdown$ | async }}
 
   <button

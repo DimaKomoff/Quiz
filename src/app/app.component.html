@@ -1,21 +1,23 @@
-<mat-toolbar color="primary">
-  <span>Вікторина</span>
-  <span class="spacer"></span>
-  <ng-container>
-    <span>Загальний рахунок:</span>
-    <mat-list *ngIf="round() !== null">
-      <mat-list-item *ngFor="let team of teamsList()">
-        {{ team.name }}: {{ team.score }}
-      </mat-list-item>
-    </mat-list>
-  </ng-container>
-</mat-toolbar>
+<header #header>
+  <mat-toolbar color="primary">
+    <span>Вікторина</span>
+    <span class="spacer"></span>
+    <ng-container>
+      <span>Загальний рахунок:</span>
+      <mat-list *ngIf="round() !== null">
+        <mat-list-item *ngFor="let team of teamsList()">
+          {{ team.name }}: {{ team.score }}
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+  </mat-toolbar>
 
-<mat-toolbar *ngIf="round() !== null" color="accent" class="sub-toolbar">
-  <span>Команда в грі: {{ teamInAction().name }}</span>
-  <span class="spacer"></span>
-  <span>Раунд: {{ currentRoundName() }}</span>
-</mat-toolbar>
+  <mat-toolbar *ngIf="round() !== null" color="accent" class="sub-toolbar">
+    <span>Команда в грі: {{ teamInAction().name }}</span>
+    <span class="spacer"></span>
+    <span>Раунд: {{ currentRoundName() }}</span>
+  </mat-toolbar>
+</header>
 
 <div class="quiz-container">
   <mat-card class="round-card">
