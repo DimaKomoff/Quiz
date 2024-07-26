@@ -1,16 +1,13 @@
-import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
-
 import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
+import { INITIAL_DEFAULT_COMMENTS_STATE } from '../../../questions';
+import { COMMENTS_ROUND_STORE_CONSTANT, } from '../../constants/comments-store.constant';
+import { Question } from '../../enums/comments.enum';
+import { Team } from '../../enums/global-state.enum';
 
 import { ICommentQuestion, ICommentsRoundState } from '../../interfaces/comments-store.intarface';
-import {
-  COMMENTS_ROUND_STORE_CONSTANT,
-  INITIAL_DEFAULT_COMMENTS_STATE
-} from '../../constants/comments-store.constant';
-import { CommentsRoundActions } from './comments.actions';
-import { Team } from '../../enums/global-state.enum';
-import { Question } from '../../enums/comments.enum';
 import { StateBase } from '../state.base';
+import { CommentsRoundActions } from './comments.actions';
 
 const COMMENTS_STATE_TOKEN = new StateToken<ICommentsRoundState>('COMMENTS_STATE_TOKEN');
 
@@ -50,7 +47,7 @@ export class CommentsState extends StateBase {
   @Action(CommentsRoundActions.RemoveCommentOptionAndDecreaseScore)
   removeOption(ctx: StateContext<ICommentsRoundState>, action: CommentsRoundActions.RemoveCommentOptionAndDecreaseScore): void {
     const state = ctx.getState();
-    const { team, question, videoName } = action;
+    const {team, question, videoName} = action;
     const step: number = state[team][question].step + 1;
 
     ctx.setState({
@@ -72,11 +69,10 @@ export class CommentsState extends StateBase {
   @Action(CommentsRoundActions.ChangeTeamQuestion)
   changeTeamQuestion(ctx: StateContext<ICommentsRoundState>, action: CommentsRoundActions.ChangeTeamQuestion): void {
     const state = ctx.getState();
-    const { team, currentQuestion } = action;
+    const {team, currentQuestion} = action;
     const questions: Question[] = (Object.values(Question).filter(q => typeof q === 'number')) as Question[];
     const currentQuestionIndex: number = questions.findIndex(q => q === currentQuestion);
     const nextQuestion: Question = questions[currentQuestionIndex + 1];
-    console.log('nextQuestion: ', nextQuestion);
 
     ctx.setState({
       ...state,

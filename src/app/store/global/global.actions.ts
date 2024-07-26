@@ -31,4 +31,8 @@ export namespace GlobalActions {
   export class ChangeTeamInAction {
     static readonly type = `${ACTION_SCOPE} Change team in action`;
   }
+
+  export class FinishGame {
+    static readonly type = `${ACTION_SCOPE} Finish game`;
+  }
 }

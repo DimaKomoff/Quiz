@@ -1,5 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
+import { take } from 'rxjs';
+import { GameIsFinishedPopupComponent } from '../../components/game-is-finished-popup/game-is-finished-popup.component';
 import {
   GLOBAL_STORE_CONSTANT,
   INITIAL_DEFAULT_GLOBAL_STATE,
@@ -18,6 +21,8 @@ const GLOBAL_STATE_TOKEN = new StateToken<IGlobalState>('GLOBAL_STATE_TOKEN');
 })
 @Injectable()
 export class GlobalState extends StateBase {
+  private readonly dialog = inject(MatDialog);
+
   readonly localStorageKey: string = GLOBAL_STORE_CONSTANT.localStorageKey;
 
   @Action(GlobalActions.SetInitialState)
@@ -100,6 +105,20 @@ export class GlobalState extends StateBase {
     });
 
     this.setStateToLocalStorage(ctx);
+  }
+
+  @Action(GlobalActions.FinishGame)
+  finishGame(ctx: StateContext<IGlobalState>) {
+    const state = ctx.getState();
+
+    this.dialog.open(GameIsFinishedPopupComponent, {
+      data: state,
+      disableClose: true
+    }).afterClosed().pipe(take(1)).subscribe(() => {
+      this.setInitialState(ctx, {state: INITIAL_DEFAULT_GLOBAL_STATE});
+
+      this.localStorage.removeItem(this.localStorageKey);
+    });
   }
 
   @Selector()

@@ -72,7 +72,10 @@ export class AliasState extends StateBase {
     const halfLapPlayedNumber = state.halfLapPlayedNumber + 1;
 
     if (halfLapPlayedNumber === ALIAS_ROUND_LAPS_NUMBER * 2) {
-      console.log('game is finished');
+      this.store.dispatch(new GlobalActions.FinishGame());
+      this.localStorage.removeItem(this.localStorageKey);
+
+      return;
     }
 
     ctx.setState({
