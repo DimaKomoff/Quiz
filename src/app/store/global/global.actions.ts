@@ -22,12 +22,6 @@ export namespace GlobalActions {
     constructor(public team1Name: string, public team2Name: string, public startingTeam: Team) {}
   }
 
-  export class SetTeamScore {
-    static readonly type = `${ACTION_SCOPE} Set Team Score`;
-
-    constructor(public team: Team, public score: number) {}
-  }
-
   export class UpdateCurrentTeamScore {
     static readonly type = `${ACTION_SCOPE} Update Team Score`;
 

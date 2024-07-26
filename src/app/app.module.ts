@@ -26,6 +26,9 @@ import { quizInitializer } from './initializers/quiz.initializer';
 import { FifthTenthState } from './store/fifth-tenth/fifth-tenth.state';
 import { GlobalState } from './store/global/global.state';
 import { TrickState } from './store/trick/trick.state';
+import { CommentsComponent } from './components/comments/comments.component';
+import { CommentsState } from './store/comments/comments.state';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,7 @@ import { TrickState } from './store/trick/trick.state';
     QuestionComponent,
     FifthTenthComponent,
     FifthTenthTaskItemComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,
@@ -47,6 +51,7 @@ import { TrickState } from './store/trick/trick.state';
     NgxsModule.forRoot([
       GlobalState,
       TrickState,
+      CommentsState,
       FifthTenthState,
     ], {developmentMode: true}),
     FormsModule,
@@ -55,7 +60,8 @@ import { TrickState } from './store/trick/trick.state';
     MatRadioModule,
     MatDialogModule,
     MatToolbarModule,
-    MatLineModule
+    MatLineModule,
+    MatSnackBarModule
   ],
   providers: [
     {
@@ -66,5 +72,4 @@ import { TrickState } from './store/trick/trick.state';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

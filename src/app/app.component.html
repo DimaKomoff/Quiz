@@ -33,6 +33,14 @@
       <app-enter-team-names *ngIf="round() === null"></app-enter-team-names>
       <app-trick *ngIf="round() === roundName.Trick"></app-trick>
       <app-fifth-tenth *ngIf="round() === roundName.FifthTenth"></app-fifth-tenth>
+      <app-comments *ngIf="round() === roundName.Comments"></app-comments>
     </mat-card-content>
   </mat-card>
 </div>
+
+<footer *ngIf="round() !== null" class="footer">
+  <div class="footer-actions-wrapper">
+    <button mat-raised-button color="primary" (click)="changeTeam()">Змінити команду</button>
+    <button mat-raised-button color="primary" (click)="nextRound()">Наступний раунд</button>
+  </div>
+</footer>
