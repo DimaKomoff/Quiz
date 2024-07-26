@@ -1,0 +1,24 @@
+:host {
+  .mat-mdc-card {
+    margin: 16px 0;
+
+    .mat-mdc-card-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mat-mdc-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 16px 16px 8px;
+
+      button {
+        min-width: calc(50% - 8px);
+      }
+    }
+  }
+}

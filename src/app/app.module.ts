@@ -29,6 +29,9 @@ import { GlobalState } from './store/global/global.state';
 import { TrickState } from './store/trick/trick.state';
 import { AliasComponent } from './components/alias/alias.component';
 import { AliasCardComponent } from './components/alias/alias-card/alias-card.component';
+import { CommentsComponent } from './components/comments/comments.component';
+import { CommentsState } from './store/comments/comments.state';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,7 @@ import { AliasCardComponent } from './components/alias/alias-card/alias-card.com
     FifthTenthTaskItemComponent,
     AliasComponent,
     AliasCardComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +56,7 @@ import { AliasCardComponent } from './components/alias/alias-card/alias-card.com
     NgxsModule.forRoot([
       GlobalState,
       TrickState,
+      CommentsState,
       FifthTenthState,
       AliasState,
     ], {developmentMode: true}),
@@ -61,7 +66,8 @@ import { AliasCardComponent } from './components/alias/alias-card/alias-card.com
     MatRadioModule,
     MatDialogModule,
     MatToolbarModule,
-    MatLineModule
+    MatLineModule,
+    MatSnackBarModule
   ],
   providers: [
     {
@@ -72,5 +78,4 @@ import { AliasCardComponent } from './components/alias/alias-card/alias-card.com
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

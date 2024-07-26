@@ -10,7 +10,6 @@ import { IGlobalState, ITeam } from '../../interfaces/global-store.interface';
 import { StateBase } from '../state.base';
 import { GlobalActions } from './global.actions';
 
-
 const GLOBAL_STATE_TOKEN = new StateToken<IGlobalState>('GLOBAL_STATE_TOKEN');
 
 @State<IGlobalState>({
@@ -65,31 +64,11 @@ export class GlobalState extends StateBase {
     this.setStateToLocalStorage(ctx);
   }
 
-  @Action(GlobalActions.SetTeamScore)
-  setTeamScore(ctx: StateContext<IGlobalState>, action: GlobalActions.SetTeamScore) {
-    const state = ctx.getState();
-
-    const {team} = action
-    ctx.setState({
-      ...state,
-      teams: {
-        ...state.teams,
-        [team]: {
-          ...state.teams[team],
-          score: action.score
-        }
-      }
-
-    });
-
-    this.setStateToLocalStorage(ctx);
-  }
-
   @Action(GlobalActions.UpdateCurrentTeamScore)
   updateCurrentTeamScore(ctx: StateContext<IGlobalState>, action: GlobalActions.UpdateCurrentTeamScore) {
     const state = ctx.getState();
+    const teamInAction = state.teamInAction as Team;
 
-    const teamInAction = state.teamInAction as Team
     ctx.setState({
       ...state,
       teams: {
@@ -109,7 +88,7 @@ export class GlobalState extends StateBase {
   changeTeamInAction(ctx: StateContext<IGlobalState>) {
     const state = ctx.getState();
 
-    const teams = Object.values(Team).filter(t => typeof t === 'number')
+    const teams = Object.values(Team).filter(t => typeof t === 'number');
 
     const currentIndex = teams.findIndex(t => t === state.teamInAction);
 

@@ -34,6 +34,7 @@
     <mat-card-content>
       <app-enter-team-names *ngIf="round() === null"></app-enter-team-names>
       <app-trick *ngIf="round() === roundName.Trick"></app-trick>
+      <app-comments *ngIf="round() === roundName.Comments"></app-comments>
       <app-fifth-tenth *ngIf="round() === roundName.FifthTenth"></app-fifth-tenth>
       <app-alias *ngIf="round() === roundName.Alias"></app-alias>
     </mat-card-content>

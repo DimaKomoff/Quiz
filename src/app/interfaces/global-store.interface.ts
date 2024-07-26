@@ -5,7 +5,7 @@ export interface ITeam {
   score: number;
 }
 
-export type IGlobalState =  & {
+export type IGlobalState = & {
   round: RoundName | null;
   teamInAction: Team | null;
   teams: {

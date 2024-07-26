@@ -28,3 +28,11 @@ header {
 .actions button {
   margin: 0 10px;
 }
+
+.footer {
+  .footer-actions-wrapper {
+    button + button {
+      margin-left: 16px;
+    }
+  }
+}
