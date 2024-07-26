@@ -4,6 +4,25 @@ header {
   top: 0;
 }
 
+mat-toolbar {
+  height: auto;
+  min-height: 80px;
+}
+
+.toolbar-wrapper, .game-score, .audio {
+  display: flex;
+  align-items: center;
+}
+
+.audio {
+  flex-direction: column;
+}
+
+.toolbar-wrapper {
+  width: 100%;
+  justify-content: space-between;
+}
+
 .spacer {
   flex: 1 1 auto;
 }

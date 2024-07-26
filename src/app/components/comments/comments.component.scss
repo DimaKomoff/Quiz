@@ -9,15 +9,14 @@
     }
 
     .mat-mdc-card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       flex-wrap: wrap;
       gap: 16px;
       padding: 16px 16px 8px;
 
       button {
-        min-width: calc(50% - 8px);
+        padding: 8px;
       }
     }
   }

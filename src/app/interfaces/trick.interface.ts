@@ -15,6 +15,7 @@ export interface ITrickCategoryQuestion {
 
 export interface ITrickCategory {
   name: string;
+  topic: string;
   questions: Record<QuestionComplexity, ITrickCategoryQuestion>;
 }
 

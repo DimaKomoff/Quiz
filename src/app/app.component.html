@@ -1,15 +1,24 @@
 <header #header>
   <mat-toolbar color="primary">
-    <span>Вікторина</span>
-    <span class="spacer"></span>
-    <ng-container>
-      <span>Загальний рахунок:</span>
-      <mat-list *ngIf="round() !== null">
-        <mat-list-item *ngFor="let team of teamsList()">
-          {{ team.name }}: {{ team.score }}
-        </mat-list-item>
-      </mat-list>
-    </ng-container>
+    <div class="toolbar-wrapper">
+      <span>Вікторина</span>
+      <div class="audio">
+        <audio controls>
+          <source src="assets/audio/game_theme.mp3">
+        </audio>
+        <audio controls>
+          <source src="assets/audio/beat_off.mp3">
+        </audio>
+      </div>
+      <div class="game-score">
+        <span>Загальний рахунок:</span>
+        <mat-list *ngIf="round() !== null">
+          <mat-list-item *ngFor="let team of teamsList()">
+            {{ team.name }}: {{ team.score }}
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
   </mat-toolbar>
 
   <mat-toolbar *ngIf="round() !== null" color="accent" class="sub-toolbar">
