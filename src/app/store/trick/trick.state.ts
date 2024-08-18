@@ -19,8 +19,10 @@ const TRICK_STATE_TOKEN = new StateToken<ITrickState>('TRICK_STATE_TOKEN');
   defaults: INITIAL_DEFAULT_TRICK_STATE,
 })
 @Injectable()
-export class TrickState extends StateBase {
-  readonly localStorageKey = TRICK_STORE_CONSTANT.localStorageKey;
+export class TrickState extends StateBase<ITrickState> {
+  constructor() {
+    super(TRICK_STORE_CONSTANT.localStorageKey, INITIAL_DEFAULT_TRICK_STATE);
+  }
 
   @Action(TrickActions.SetInitialState)
   setInitialState(ctx: StateContext<ITrickState>, action: TrickActions.SetInitialState) {
@@ -33,15 +35,12 @@ export class TrickState extends StateBase {
 
     const categoryName = action.category.name;
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx, {
       categoryInAction: categoryName,
       playedCategories: [...state.playedCategories, categoryName],
       roundStatus: TrickRoundStatus.Play,
       questionComplexityInAction: action.questionComplexity
     });
-
-    this.setStateToLocalStorage(ctx);
 
     this.store.dispatch(new GlobalActions.ChangeTeamInAction());
   }
@@ -49,12 +48,15 @@ export class TrickState extends StateBase {
   @Action(TrickActions.AnswerQuestion)
   answerQuestion(ctx: StateContext<ITrickState>, action: TrickActions.AnswerQuestion) {
     const state = ctx.getState();
+    const isCorrectAnswer = action.answerStatus === AnswerStatus.Correct
 
-    if (action.answerStatus === AnswerStatus.Correct) {
+    if (isCorrectAnswer) {
       const questionWeight = QUESTION_COMPLEXITY_WEIGHT.get(state.questionComplexityInAction as QuestionComplexity);
 
       this.store.dispatch(new GlobalActions.UpdateCurrentTeamScore(questionWeight as number));
     }
+
+    this.audioService[isCorrectAnswer ? 'playCorrectBeatOff' : 'playIncorrectBeatOff']();
 
     this.nextLap(ctx);
   }
@@ -87,15 +89,12 @@ export class TrickState extends StateBase {
     if (state.playedCategories.length === state.roundTask.categories.length) {
       this.store.dispatch(new GlobalActions.SetRound(RoundName.Comments));
 
-      ctx.setState(INITIAL_DEFAULT_TRICK_STATE);
-
-      this.localStorage.removeItem(this.localStorageKey);
+      this.dropState(ctx)
 
       return;
     }
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx, {
       roundStatus: TrickRoundStatus.ChoosingQuestion,
       questionComplexityInAction: null,
       categoryInAction: null

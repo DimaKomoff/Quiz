@@ -1,15 +1,30 @@
 import { inject } from '@angular/core';
 import { StateContext, Store } from '@ngxs/store';
+import { AudioService } from '../services/audio.service';
 import { LocalStorageService } from '../services/local-storage.service';
 
-export abstract class StateBase {
-  protected readonly localStorage = inject(LocalStorageService);
+export abstract class StateBase<State> {
+  private readonly localStorage = inject(LocalStorageService);
 
   protected readonly store = inject(Store);
 
-  abstract readonly localStorageKey: string;
+  protected audioService = inject(AudioService);
 
-  protected setStateToLocalStorage<T>(ctx: StateContext<T>) {
-    this.localStorage.setItem(this.localStorageKey, JSON.stringify(ctx.getState()))
+  protected constructor(private localStorageKey: string, private defaultState: State) {}
+
+  protected patchState(ctx: StateContext<State>, newState: Partial<State>) {
+    ctx.patchState(newState);
+
+    this.setStateToLocalStorage(ctx.getState());
+  }
+
+  protected dropState(ctx: StateContext<State>) {
+    ctx.setState(this.defaultState);
+
+    this.localStorage.removeItem(this.localStorageKey);
+  }
+
+  private setStateToLocalStorage(state: State) {
+    this.localStorage.setItem(this.localStorageKey, JSON.stringify(state))
   }
 }

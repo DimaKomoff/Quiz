@@ -20,10 +20,12 @@ const GLOBAL_STATE_TOKEN = new StateToken<IGlobalState>('GLOBAL_STATE_TOKEN');
   defaults: INITIAL_DEFAULT_GLOBAL_STATE
 })
 @Injectable()
-export class GlobalState extends StateBase {
+export class GlobalState extends StateBase<IGlobalState> {
   private readonly dialog = inject(MatDialog);
 
-  readonly localStorageKey: string = GLOBAL_STORE_CONSTANT.localStorageKey;
+  constructor() {
+    super(GLOBAL_STORE_CONSTANT.localStorageKey, INITIAL_DEFAULT_GLOBAL_STATE);
+  }
 
   @Action(GlobalActions.SetInitialState)
   setInitialState(ctx: StateContext<IGlobalState>, action: GlobalActions.SetInitialState) {
@@ -38,20 +40,16 @@ export class GlobalState extends StateBase {
     const team2Score = state.teams[Team.Team2].score;
     const teamInAction = team2Score > team1Score ? Team.Team2 : Team.Team1;
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx,{
       round: action.round,
       teamInAction
     });
-
-    this.setStateToLocalStorage(ctx);
   }
 
   @Action(GlobalActions.StartGame)
   startGame(ctx: StateContext<IGlobalState>, action: GlobalActions.StartGame) {
     const state = ctx.getState();
-    ctx.setState({
-      ...state,
+    this.patchState(ctx,{
       round: RoundName.Trick,
       teams: {
         [Team.Team1]: {
@@ -65,8 +63,6 @@ export class GlobalState extends StateBase {
       },
       teamInAction: action.startingTeam
     });
-
-    this.setStateToLocalStorage(ctx);
   }
 
   @Action(GlobalActions.UpdateCurrentTeamScore)
@@ -74,8 +70,7 @@ export class GlobalState extends StateBase {
     const state = ctx.getState();
     const teamInAction = state.teamInAction as Team;
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx, {
       teams: {
         ...state.teams,
         [teamInAction]: {
@@ -83,10 +78,7 @@ export class GlobalState extends StateBase {
           score: state.teams[teamInAction].score + action.score
         }
       }
-
     });
-
-    this.setStateToLocalStorage(ctx);
   }
 
   @Action(GlobalActions.ChangeTeamInAction)
@@ -99,12 +91,9 @@ export class GlobalState extends StateBase {
 
     const nextIndex = (currentIndex + 1) % teams.length;
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx,{
       teamInAction: teams[nextIndex] as Team
     });
-
-    this.setStateToLocalStorage(ctx);
   }
 
   @Action(GlobalActions.FinishGame)
@@ -115,9 +104,7 @@ export class GlobalState extends StateBase {
       data: state,
       disableClose: true
     }).afterClosed().pipe(take(1)).subscribe(() => {
-      this.setInitialState(ctx, {state: INITIAL_DEFAULT_GLOBAL_STATE});
-
-      this.localStorage.removeItem(this.localStorageKey);
+      this.dropState(ctx);
     });
   }
 

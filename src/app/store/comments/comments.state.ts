@@ -16,8 +16,10 @@ const COMMENTS_STATE_TOKEN = new StateToken<ICommentsRoundState>('COMMENTS_STATE
   defaults: INITIAL_DEFAULT_COMMENTS_STATE
 })
 @Injectable()
-export class CommentsState extends StateBase {
-  readonly localStorageKey = COMMENTS_ROUND_STORE_CONSTANT.localStorageKey;
+export class CommentsState extends StateBase<ICommentsRoundState> {
+  constructor() {
+    super(COMMENTS_ROUND_STORE_CONSTANT.localStorageKey, INITIAL_DEFAULT_COMMENTS_STATE);
+  }
 
   @Selector()
   static getTeam1Question(state: ICommentsRoundState): ICommentQuestion {
@@ -50,8 +52,7 @@ export class CommentsState extends StateBase {
     const {team, question, videoName} = action;
     const step: number = state[team][question].step + 1;
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx, {
       [team]: {
         ...state[team],
         [question]: {
@@ -62,8 +63,6 @@ export class CommentsState extends StateBase {
         }
       }
     });
-
-    this.setStateToLocalStorage(ctx);
   }
 
   @Action(CommentsRoundActions.ChangeTeamQuestion)
@@ -74,14 +73,11 @@ export class CommentsState extends StateBase {
     const currentQuestionIndex: number = questions.findIndex(q => q === currentQuestion);
     const nextQuestion: Question = questions[currentQuestionIndex + 1];
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx, {
       [team]: {
         ...state[team],
         currentQuestion: nextQuestion || null
       }
     });
-
-    this.setStateToLocalStorage(ctx);
   }
 }
