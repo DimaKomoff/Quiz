@@ -20,8 +20,11 @@ const ALIAS_STATE_TOKEN = new StateToken<IAliasState>('ALIAS_STATE_TOKEN');
   defaults: INITIAL_DEFAULT_ALIAS_STATE
 })
 @Injectable()
-export class AliasState extends StateBase {
-  readonly localStorageKey: string = ALIAS_STORE_CONSTANT.localStorageKey;
+export class AliasState extends StateBase<IAliasState> {
+  constructor() {
+    super(ALIAS_STORE_CONSTANT.localStorageKey, INITIAL_DEFAULT_ALIAS_STATE);
+  }
+
 
   @Action(AliasActions.SetInitialState)
   setInitialState(ctx: StateContext<IAliasState>, action: AliasActions.SetInitialState) {
@@ -33,8 +36,7 @@ export class AliasState extends StateBase {
     const state = ctx.getState();
     const currentTeamInAction = this.store.selectSnapshot(GlobalState.getTeamInActionIndex);
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx, {
       tasks: {
         ...state.tasks,
         [currentTeamInAction]: this.playWord(state, currentTeamInAction, action),
@@ -42,8 +44,6 @@ export class AliasState extends StateBase {
     });
 
     this.store.dispatch(new GlobalActions.UpdateCurrentTeamScore(ALIAS_WORD_COST));
-
-    this.setStateToLocalStorage(ctx);
   }
 
   @Action(AliasActions.WordSkipped)
@@ -53,8 +53,7 @@ export class AliasState extends StateBase {
 
     const cost = -ALIAS_WORD_COST;
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx, {
       tasks: {
         ...state.tasks,
         [currentTeamInAction]: this.playWord(state, currentTeamInAction, action),
@@ -62,8 +61,6 @@ export class AliasState extends StateBase {
     });
 
     this.store.dispatch(new GlobalActions.UpdateCurrentTeamScore(cost));
-
-    this.setStateToLocalStorage(ctx);
   }
 
   @Action(AliasActions.FinishHalfLap)
@@ -71,19 +68,20 @@ export class AliasState extends StateBase {
     const state = ctx.getState();
     const halfLapPlayedNumber = state.halfLapPlayedNumber + 1;
 
+    this.audioService.playCorrectBeatOff();
+
     if (halfLapPlayedNumber === ALIAS_ROUND_LAPS_NUMBER * 2) {
+      // TODO add functionality to ask about additional alias lap
+
       this.store.dispatch(new GlobalActions.FinishGame());
-      this.localStorage.removeItem(this.localStorageKey);
+      this.dropState(ctx);
 
       return;
     }
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx, {
       halfLapPlayedNumber
     });
-
-    this.setStateToLocalStorage(ctx);
 
     this.store.dispatch(new GlobalActions.ChangeTeamInAction());
   }

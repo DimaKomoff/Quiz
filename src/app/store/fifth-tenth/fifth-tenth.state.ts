@@ -14,8 +14,11 @@ const FIFTH_TENTH_STATE_TOKEN = new StateToken<IFifthTenthState>('FIFTH_TENTH_ST
   defaults: INITIAL_DEFAULT_FIFTH_TENTH_STATE
 })
 @Injectable()
-export class FifthTenthState extends StateBase {
-  localStorageKey = FIFTH_TENTH_STORE_CONSTANT.localStorageKey;
+export class FifthTenthState extends StateBase<IFifthTenthState> {
+  constructor() {
+    super(FIFTH_TENTH_STORE_CONSTANT.localStorageKey, INITIAL_DEFAULT_FIFTH_TENTH_STATE);
+  }
+
 
   @Action(FifthTenthActions.SetInitialState)
   setInitialState(ctx: StateContext<IFifthTenthState>, action: FifthTenthActions.SetInitialState) {
@@ -40,15 +43,12 @@ export class FifthTenthState extends StateBase {
     if (questions.every(question => question.isPlayed)) {
       this.store.dispatch(new GlobalActions.SetRound(RoundName.Alias));
 
-      ctx.setState(INITIAL_DEFAULT_FIFTH_TENTH_STATE);
-
-      this.localStorage.removeItem(this.localStorageKey);
+      this.dropState(ctx);
 
       return;
     }
 
-    ctx.setState({
-      ...state,
+    this.patchState(ctx, {
       roundTask: {
         ...state.roundTask,
         questions
@@ -59,9 +59,9 @@ export class FifthTenthState extends StateBase {
       this.store.dispatch(new GlobalActions.UpdateCurrentTeamScore(1));
     }
 
-    this.store.dispatch(new GlobalActions.ChangeTeamInAction());
+    this.audioService[action.isCorrectAnswer ? 'playCorrectBeatOff' : 'playIncorrectBeatOff']();
 
-    this.setStateToLocalStorage(ctx);
+    this.store.dispatch(new GlobalActions.ChangeTeamInAction());
   }
 
   @Selector()

@@ -5,6 +5,7 @@ import { COMMENTS_ROUND_STORE_CONSTANT } from '../../constants/comments-store.co
 import { Question } from '../../enums/comments.enum';
 import { RoundName, Team } from '../../enums/global-state.enum';
 import { ICommentOption } from '../../interfaces/comments-store.intarface';
+import { AudioService } from '../../services/audio.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 
 import { CommentsRoundActions } from '../../store/comments/comments.actions';
@@ -21,6 +22,7 @@ import { GlobalState } from '../../store/global/global.state';
 export class CommentsComponent implements OnInit {
   private readonly _localStorage = inject(LocalStorageService);
   private readonly _store = inject(Store);
+  private readonly _audioService = inject(AudioService);
 
   team = Team;
   teamsQuestions = {
@@ -56,6 +58,7 @@ export class CommentsComponent implements OnInit {
         return;
       }
       this._store.dispatch(new GlobalActions.ChangeTeamInAction());
+      this._audioService.playCorrectBeatOff();
     } else {
       this._store.dispatch(new CommentsRoundActions.RemoveCommentOptionAndDecreaseScore(team, teamCurrentQuestion, option.videoName));
 
@@ -69,6 +72,8 @@ export class CommentsComponent implements OnInit {
         }
         this._store.dispatch(new GlobalActions.ChangeTeamInAction());
       }
+
+      this._audioService.playIncorrectBeatOff();
     }
 
     this.openSnackBar(option.isCorrect ? 'Вірно' : 'Невірно');

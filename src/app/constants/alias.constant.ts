@@ -12,4 +12,4 @@ export const INITIAL_DEFAULT_ALIAS_STATE: IAliasState = {
 
 export const ALIAS_WORD_COST = 1;
 
-export const ALIAS_ROUND_LAPS_NUMBER = 2;
+export const ALIAS_ROUND_LAPS_NUMBER = 4;
