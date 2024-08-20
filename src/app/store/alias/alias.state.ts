@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
+import { map, Observable, of, take } from 'rxjs';
 import {
   ALIAS_ROUND_LAPS_NUMBER,
   ALIAS_STORE_CONSTANT, ALIAS_WORD_COST,
@@ -8,6 +10,7 @@ import {
 import { Team } from '../../enums/global-state.enum';
 import { AliasTasks, AliasWords, IAliasState } from '../../interfaces/alias.interface';
 import { IFifthTenthRoundQuestion, IFifthTenthState } from '../../interfaces/fifth-tenth.interface';
+import { ConfirmDialogComponent } from '../../shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { GlobalActions } from '../global/global.actions';
 import { GlobalState } from '../global/global.state';
 import { StateBase } from '../state.base';
@@ -21,10 +24,11 @@ const ALIAS_STATE_TOKEN = new StateToken<IAliasState>('ALIAS_STATE_TOKEN');
 })
 @Injectable()
 export class AliasState extends StateBase<IAliasState> {
+  private readonly dialog = inject(MatDialog);
+
   constructor() {
     super(ALIAS_STORE_CONSTANT.localStorageKey, INITIAL_DEFAULT_ALIAS_STATE);
   }
-
 
   @Action(AliasActions.SetInitialState)
   setInitialState(ctx: StateContext<IAliasState>, action: AliasActions.SetInitialState) {
@@ -65,25 +69,46 @@ export class AliasState extends StateBase<IAliasState> {
 
   @Action(AliasActions.FinishHalfLap)
   finishHalfLap(ctx: StateContext<IAliasState>) {
-    const state = ctx.getState();
-    const halfLapPlayedNumber = state.halfLapPlayedNumber + 1;
-
     this.audioService.playCorrectBeatOff();
 
+    const state = ctx.getState();
+    let halfLapPlayedNumber = state.halfLapPlayedNumber + 1;
+
+    let result$: Observable<number | false>;
+
     if (halfLapPlayedNumber === ALIAS_ROUND_LAPS_NUMBER * 2) {
-      // TODO add functionality to ask about additional alias lap
+      const additionalRoundConfirmDialog = this.dialog.open(ConfirmDialogComponent, {
+        data: {title: 'Чи бажаєте ще одне додаткове коло?'},
+        disableClose: true
+      });
 
-      this.store.dispatch(new GlobalActions.FinishGame());
-      this.dropState(ctx);
+      result$ = additionalRoundConfirmDialog.afterClosed().pipe(
+        map(confirmed => {
+          if (confirmed) {
+            return halfLapPlayedNumber - 2;
+          }
 
-      return;
+          return false;
+        })
+      );
+    } else {
+      result$ = of(halfLapPlayedNumber);
     }
 
-    this.patchState(ctx, {
-      halfLapPlayedNumber
-    });
+    result$.pipe(take(1)).subscribe(halfLapPlayedNumber => {
+      if (!halfLapPlayedNumber) {
+        this.store.dispatch(new GlobalActions.FinishGame());
+        this.dropState(ctx);
 
-    this.store.dispatch(new GlobalActions.ChangeTeamInAction());
+        return;
+      }
+
+      this.patchState(ctx, {
+        halfLapPlayedNumber
+      });
+
+      this.store.dispatch(new GlobalActions.ChangeTeamInAction());
+    });
   }
 
   @Selector()

@@ -1,0 +1,5 @@
+<h1 mat-dialog-title> {{data?.title || 'Ви впевнені?'}}</h1>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="dialogRef.close(false)">Ні</button>
+  <button mat-raised-button color="primary" (click)="dialogRef.close(true)">Так</button>
+</div>
